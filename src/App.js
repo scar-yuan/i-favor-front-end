@@ -6,6 +6,8 @@ import TodoList from "../src/pages/todolist/index.jsx";
 import Collection from "../src/pages/collection/index.jsx";
 import Study from "../src/pages/study/index";
 import Login from "./pages/login/index";
+import "antd/dist/antd.css";
+import { GlobalStyle } from "./style.js";
 
 import "./App.css";
 function App() {
@@ -18,6 +20,7 @@ function App() {
         <Route path="/study" exact component={Study} />
         <Route path="/login" exact component={Login} />
       </Routes>
+      <GlobalStyle />
     </div>
   );
 }
