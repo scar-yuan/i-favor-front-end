@@ -8,13 +8,6 @@ import TodoCard from '../../components/TodoCard';
 import CollectionCard from '../../components/CollectionCard';
 import BigTime from '../../components/BigTime';
 import SearchView from '../../components/SearchView';
-<<<<<<< HEAD
-
-function Home(props) {
-    const [login, setLogin] = useState(false)
-    const onChange = () => {
-        console.log('切换模式');
-=======
 import setDarkTheme from '../../assets/untils/darkTheme'
 
 function Home(props) {
@@ -23,7 +16,7 @@ function Home(props) {
     const onChange = () => {
         setthemeState(() => !themeState)
         setDarkTheme(themeState)
->>>>>>> 6df2ad2d88e1ee0911f3c76602f6d13c8c3e2e6f
+
     }
     return (
         <div>
@@ -48,18 +41,12 @@ function Home(props) {
     )
 }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 6df2ad2d88e1ee0911f3c76602f6d13c8c3e2e6f
 const Section = styled.section`
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     margin: 50px 100px 0px 100px;
 `
-<<<<<<< HEAD
-=======
 
->>>>>>> 6df2ad2d88e1ee0911f3c76602f6d13c8c3e2e6f
 export default Home
