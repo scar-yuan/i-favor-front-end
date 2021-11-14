@@ -1,8 +1,5 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import {connect} from 'react-redux'
-
-import {userLoginAction} from '../../store/actions.js'
 
 function Home(props) {
     const {username,login} = props
@@ -17,15 +14,4 @@ function Home(props) {
     )
 }
 
-export default connect(
-    function mapStateToProps(state) {
-        return state;
-    },
-    function mapDispatchToProps(dispatch) {
-        return {
-            login:(userName) => {
-                dispatch(userLoginAction(userName))
-            }
-        };
-    }
-)(Home)
+export default Home
