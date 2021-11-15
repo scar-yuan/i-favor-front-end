@@ -35,7 +35,7 @@ function Particle() {
                 color: {
                   value: "#5276f5",
                 },
-                size: 30,
+                size: 20,
               },
               grab: {
                 distance: 300,
@@ -56,8 +56,8 @@ function Particle() {
             move: {
               attract: {
                 rotate: {
-                  x: 600,
-                  y: 1200,
+                  x: 500,
+                  y: 1000,
                 },
               },
               enable: true,

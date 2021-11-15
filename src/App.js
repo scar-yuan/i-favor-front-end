@@ -5,6 +5,7 @@ import Home from "./pages/home/index.jsx";
 import TodoList from "../src/pages/todolist/index.jsx";
 import Collection from "../src/pages/collection/index.jsx";
 import Study from "../src/pages/study/index";
+
 import Login from "./pages/login/index";
 import "antd/dist/antd.css";
 import { GlobalStyle } from "./style.js";

@@ -1,7 +1,7 @@
-import React,{useEffect} from "react";
+import React from "react";
 import LoginText from "../../components/animate/LoginText";
 import MyParticles from "../../components/animate/Particle";
-import axios from "axios";
+// import axios from "axios";
 import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { LoginWrap } from "./StyledLogin";

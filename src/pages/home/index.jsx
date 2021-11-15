@@ -8,11 +8,15 @@ import TodoCard from '../../components/TodoCard';
 import CollectionCard from '../../components/CollectionCard';
 import BigTime from '../../components/BigTime';
 import SearchView from '../../components/SearchView';
+import setDarkTheme from '../../assets/untils/darkTheme'
 
 function Home(props) {
     const [login, setLogin] = useState(false)
+    const [themeState,setthemeState] = useState(false)
     const onChange = () => {
-        console.log('切换模式');
+        setthemeState(() => !themeState)
+        setDarkTheme(themeState)
+
     }
     return (
         <div>
