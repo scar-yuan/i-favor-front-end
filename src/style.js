@@ -2,13 +2,20 @@
 import { createGlobalStyle } from "styled-components";
 export const GlobalStyle = createGlobalStyle`
 /* 白色 */
+/* dark 为false的时候 */
+/* ${(props) => (props.dark ? "#000" : "rgb(233,233,233)")} */
 :root {
-  --primary-bg: rgb(233,233,233); // 全局背景色，在下面配置
-  --font-fg: #000;  // 字体颜色
-  --card-bg: #e6e6e6; // 组件渐变第一个颜色
-  --card-fg: #ffffff; // 组件渐变第二个颜色
-  --card-sd: #c4c4c4; // 卡片阴影第一个颜色
-  --card-sf: #ffffff; // 卡片阴影第二个颜色
+  --primary-bg: ${(props) =>
+    props.dark ? "#2b2b2b" : "rgb(233,233,233)"} ; // 全局背景色，在下面配置
+  --font-fg: ${(props) => (props.dark ? "#fff" : "#000")};  // 字体颜色
+  --card-bg: ${(props) =>
+    props.dark ? "#272727" : "#e6e6e6"}; // 组件渐变第一个颜色
+  --card-fg: ${(props) =>
+    props.dark ? "#2e2e2e" : "#ffffff"}; // 组件渐变第二个颜色
+  --card-sd: ${(props) =>
+    props.dark ? "#252525" : "#c4c4c4"}; // 卡片阴影第一个颜色
+  --card-sf: ${(props) =>
+    props.dark ? "#313131" : "#ffffff"}; // 卡片阴影第二个颜色
   --primary-btn-bg: #000; // 
   --primary-btn-fg: #fff;
   --secondary-btn-bg: #ff0000;
@@ -16,7 +23,7 @@ export const GlobalStyle = createGlobalStyle`
 }
 @media (prefers-color-scheme: dark) {
     :root {
-        --primary-bg: #000; // 全局背景色，在下面配置
+        --primary-bg: #2b2b2b; // 全局背景色，在下面配置
         --font-fg: #fff;  // 字体颜色
         --card-bg: #2e2e2e; // 组件渐变第一个颜色
         --card-fg: #373737; // 组件渐变第二个颜色

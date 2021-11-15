@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 // import { Link } from 'react-router-dom'
 import styled from "styled-components";
 import { Button, Row, Switch, Avatar } from 'antd'
@@ -8,30 +8,14 @@ import TodoCard from './components/TodoCard';
 import CollectionCard from './components/CollectionCard';
 import BigTime from './components/BigTime';
 import SearchView from './components/SearchView';
-import setDarkTheme from '../../assets/untils/darkTheme'
-
+import {ThemeContext} from '../../App.js'
 function Home(props) {
     const [login, setLogin] = useState(false)
-    const [themeState, setThemeState] = useState(false) // false 是浅色，true 是深色
-
-    // 初始化主题状态
-    useEffect(() => {
-        //1.localStorage操作是同步的
-        //2.setState是异步的
-        //3.localStorage.getItem返回值是字符串，转boolean都是true，没有时是null
-        let localThemeState
-        if(localStorage.getItem('theme') === null ||localStorage.getItem('theme') === 'false'){
-            localThemeState = false
-        } else {
-            localThemeState = true
-        }
-         setThemeState(localThemeState)
-         setDarkTheme(localThemeState)
-    },[])
+    // 采用全局样式
+    const [themeType, setThemeType] = useContext(ThemeContext)
     const onChange =  () => {
-        setThemeState(!themeState)
-        setDarkTheme(!themeState)
-        localStorage.setItem('theme', !themeState)
+        setThemeType(!themeType)
+        localStorage.setItem('theme', !themeType)
     }
     return (
         <div>
@@ -43,7 +27,7 @@ function Home(props) {
                 }
 
                 {/* 模式切换 */}
-                <Switch checked={themeState} style={{ margin: "5px 5px 0px 0px" }} checkedChildren="黑夜" unCheckedChildren="白天" onChange={onChange} />
+                <Switch checked={themeType} style={{ margin: "5px 5px 0px 0px" }} checkedChildren="白天" unCheckedChildren="黑夜" onChange={onChange} />
             </Row>
             <BigTime />
             <SearchView />
