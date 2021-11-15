@@ -20,13 +20,15 @@ const ButtonBox = styled.div`
     bottom: 30px;
 `
 const NewCard = styled(Card)`
+  color: var(--font-fg);
+  border: none;
   position: relative;
   flex: 1;
   margin: 0px 100px;
   border-radius: 25px; 
   background: linear-gradient(145deg, var(--card-bg), var(--card-fg));
-  box-shadow:  20px 20px 40px var(--card-sd),
-               -20px -20px 40px var(--card-sf);
+  box-shadow:  5px 5px 10px var(--card-sd),
+               -5px -5px 10px var(--card-sf);
   transition: all 0.3s ease 0s;
   cursor: pointer;
   :hover {

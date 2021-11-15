@@ -15,12 +15,13 @@ const SearchView = () => {
     );
 };
 const Container = styled.div`
-    
+    color: var(--font-fg);
     display: flex;
     justify-content: center;
     margin: 50px ;
 `
 const Input = styled.input`
+    
     width: 550px;
     height: 55px;
     font-size: 20px;
@@ -28,8 +29,8 @@ const Input = styled.input`
     border: none;
     border-radius: 25px; 
     background: linear-gradient(145deg, var(--card-bg), var(--card-fg));
-    box-shadow:  20px 20px 40px var(--card-sd),
-               -20px -20px 40px var(--card-sf);
+    box-shadow: 5px 5px 10px var(--card-sd),
+               -5px -5px 10px var(--card-sf);
     text-indent: 2em;
     ::placeholder {
         font-size: 16px;

@@ -1,22 +1,33 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 // import { Link } from 'react-router-dom'
 import styled from "styled-components";
 import { Button, Row, Switch, Avatar } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
-import StudyCard from '../../components/StudyCard'
-import TodoCard from '../../components/TodoCard';
-import CollectionCard from '../../components/CollectionCard';
-import BigTime from '../../components/BigTime';
-import SearchView from '../../components/SearchView';
+import StudyCard from './components/StudyCard'
+import TodoCard from './components/TodoCard';
+import CollectionCard from './components/CollectionCard';
+import BigTime from './components/BigTime';
+import SearchView from './components/SearchView';
 import setDarkTheme from '../../assets/untils/darkTheme'
 
 function Home(props) {
     const [login, setLogin] = useState(false)
-    const [themeState,setthemeState] = useState(false)
-    const onChange = () => {
-        setthemeState(() => !themeState)
-        setDarkTheme(themeState)
+    const [themeState, setThemeState] = useState(false) // false 是浅色，true 是深色
 
+    // 初始化主题状态
+    useEffect(() => {
+        const initTheme = async () => {
+            const theme = await localStorage.getItem('theme')
+            // 获取本地数据
+            setThemeState(!!theme)
+            setDarkTheme(!!theme)
+        }
+        initTheme()
+    }, [])
+    const onChange =  () => {
+        setThemeState(!themeState)
+        setDarkTheme(!!themeState)
+        localStorage.setItem('theme', themeState)
     }
     return (
         <div>
@@ -28,7 +39,7 @@ function Home(props) {
                 }
 
                 {/* 模式切换 */}
-                <Switch style={{ margin: "5px 5px 0px 0px" }} checkedChildren="黑夜" unCheckedChildren="白天" onChange={onChange} />
+                <Switch checked={!!themeState} style={{ margin: "5px 5px 0px 0px" }} checkedChildren="白天" unCheckedChildren="黑夜" onChange={onChange} />
             </Row>
             <BigTime />
             <SearchView />

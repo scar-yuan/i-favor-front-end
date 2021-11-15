@@ -21,6 +21,7 @@ const BigTime = () => {
     );
 };
 const Time = styled.div`
+    color: var(--font-fg);
     display: flex;
     flex-direction: column;
     align-items: center;
