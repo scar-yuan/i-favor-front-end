@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Route, BrowserRouter as Routes } from "react-router-dom";
 
 import Home from "./pages/home/index.jsx";
@@ -9,11 +9,26 @@ import Study from "../src/pages/study/index";
 import Login from "./pages/login/index";
 import "antd/dist/antd.css";
 import { GlobalStyle } from "./style.js";
-
 import "./App.css";
+export const ThemeContext = React.createContext("");
+
 function App() {
+  const [themeType, setThemeType] = useState(false);
+  // 初始化主题
+  useEffect(() => {
+    const initTheme = async () => {
+      let theme = await localStorage.getItem("theme");
+      if (theme === null || theme === "false") {
+        setThemeType(false);
+      } else {
+        setThemeType(true);
+      }
+    };
+    initTheme();
+  }, []);
+
   return (
-    <div className="App">
+    <ThemeContext.Provider value={[themeType, setThemeType]} className="App">
       <Routes>
         <Route path="/" exact component={Home} />
         <Route path="/todolist" exact component={TodoList} />
@@ -21,8 +36,8 @@ function App() {
         <Route path="/study" exact component={Study} />
         <Route path="/login" exact component={Login} />
       </Routes>
-      <GlobalStyle />
-    </div>
+      <GlobalStyle dark={themeType} />
+    </ThemeContext.Provider>
   );
 }
 
