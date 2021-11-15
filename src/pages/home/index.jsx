@@ -16,18 +16,22 @@ function Home(props) {
 
     // 初始化主题状态
     useEffect(() => {
-        const initTheme = async () => {
-            const theme = await localStorage.getItem('theme')
-            // 获取本地数据
-            setThemeState(!!theme)
-            setDarkTheme(!!theme)
+        //1.localStorage操作是同步的
+        //2.setState是异步的
+        //3.localStorage.getItem返回值是字符串，转boolean都是true，没有时是null
+        let localThemeState
+        if(localStorage.getItem('theme') === null ||localStorage.getItem('theme') === 'false'){
+            localThemeState = false
+        } else {
+            localThemeState = true
         }
-        initTheme()
-    }, [])
+         setThemeState(localThemeState)
+         setDarkTheme(localThemeState)
+    },[])
     const onChange =  () => {
         setThemeState(!themeState)
-        setDarkTheme(!!themeState)
-        localStorage.setItem('theme', themeState)
+        setDarkTheme(!themeState)
+        localStorage.setItem('theme', !themeState)
     }
     return (
         <div>
@@ -39,7 +43,7 @@ function Home(props) {
                 }
 
                 {/* 模式切换 */}
-                <Switch checked={!!themeState} style={{ margin: "5px 5px 0px 0px" }} checkedChildren="白天" unCheckedChildren="黑夜" onChange={onChange} />
+                <Switch checked={themeState} style={{ margin: "5px 5px 0px 0px" }} checkedChildren="黑夜" unCheckedChildren="白天" onChange={onChange} />
             </Row>
             <BigTime />
             <SearchView />
