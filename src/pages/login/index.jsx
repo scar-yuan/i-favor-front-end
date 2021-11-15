@@ -1,14 +1,51 @@
-import React from "react";
+import React,{useEffect} from "react";
 import LoginText from "../../components/animate/LoginText";
 import MyParticles from "../../components/animate/Particle";
-import { Form, Input, Button,Checkbox } from "antd";
+import axios from "axios";
+import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { LoginWrap } from "./StyledLogin";
-import logo from '../../assets/logo/logo192.png'
+import logo from "../../assets/logo/logo192.png";
 function Login() {
-  const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
+  const onFinish = (values) => {
+    // axios.get('/login',{
+    //   ...values
+    // })
+    console.log(values);
   };
+  const [form] = Form.useForm();
+
+  const checkUser = async (_, value) => {
+    let reg = /^[a-zA-Z0-9]{4,16}$/;
+    if (value == null) {
+      return Promise.reject(new Error("请输入用户名"));
+    } else {
+      if (value.length === 0) {
+        return Promise.reject(new Error("请输入用户名"));
+      }
+      if (!reg.exec(value) && value.length > 0) {
+        return Promise.reject(new Error("用户名不合规范(4~16包含数字、字母)"));
+      } else {
+        return Promise.resolve();
+      }
+    }
+  };
+
+  const checkPassword = (_, value) => {
+    let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
+    if (value == null) {
+      return Promise.reject(new Error("请输入密码"));
+    }
+    if (value.length === 0) {
+      return Promise.reject(new Error("请输入密码"));
+    }
+    if (!reg.exec(value) && value.length > 0) {
+      return Promise.reject(new Error("密码不合规范(6~16包含数字、字母)"));
+    } else {
+      return Promise.resolve();
+    }
+  };
+
   return (
     <>
       <LoginWrap>
@@ -22,12 +59,13 @@ function Login() {
         {/* 右边表单 */}
         <div className="login-right">
           <div className="opacity">
-            <div className="logo" >
-              <img src={logo} alt="" width="80px" height="80px"/>
+            <div className="logo">
+              <img src={logo} alt="" width="80px" height="80px" />
             </div>
             <div className="form-title">sign in to ifavor</div>
             <div className="form-wrap">
               <Form
+                form={form}
                 name="normal_login"
                 className="login-form"
                 initialValues={{ remember: true }}
@@ -36,7 +74,10 @@ function Login() {
                 <Form.Item
                   name="username"
                   rules={[
-                    { required: true, message: "Please input your Username!" },
+                    {
+                      validator: checkUser,
+                      // message: "Please input your nickname",
+                    },
                   ]}
                 >
                   <Input
@@ -48,7 +89,10 @@ function Login() {
                 <Form.Item
                   name="password"
                   rules={[
-                    { required: true, message: "Please input your Password!" },
+                    {
+                      validator: checkPassword,
+                      // message: "Please input your passwprd",
+                    },
                   ]}
                 >
                   <Input
