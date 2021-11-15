@@ -3,6 +3,7 @@ import styled from "styled-components";
 const LoginWrap = styled.div`
   height: 100vh;
   width: 100%;
+  min-width: 1024px;
   display: flex;
   background-color: aqua;
   position: relative;
@@ -47,6 +48,8 @@ const LoginWrap = styled.div`
       .logo {
         background: linear-gradient(145deg, #ececec, #f0f0f0);
         box-shadow: 10px 10px 30px #bebebe, -10px -10px 30px #fff;
+        margin-bottom: 20px;
+        cursor: pointer;
       }
       .form-title {
         font-size: 25px;
@@ -64,7 +67,7 @@ const LoginWrap = styled.div`
             width: 100%;
             height: 40px;
             border-radius: 5px;
-            margin: 10px 0;
+            margin-top: 10px;
           }
         }
         .login-form-forgot {

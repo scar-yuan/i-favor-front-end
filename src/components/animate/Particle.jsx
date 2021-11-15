@@ -29,7 +29,7 @@ function Particle() {
             },
             modes: {
               bubble: {
-                distance: 300,
+                distance: 500,
                 duration: 2,
                 opacity: 0.8,
                 color: {
@@ -38,7 +38,7 @@ function Particle() {
                 size: 20,
               },
               grab: {
-                distance: 300,
+                distance: 500,
               },
             },
           },
@@ -50,24 +50,24 @@ function Particle() {
               color: {
                 value: "#ffffff",
               },
-              distance: 200,
+              distance: 400,
               width: 2,
             },
             move: {
               attract: {
                 rotate: {
-                  x: 500,
-                  y: 1000,
+                  x: 700,
+                  y: 1200,
                 },
               },
               enable: true,
               outModes: {
                 bottom: "out",
-                left: "out",
+                lft:"out",
                 right: "out",
                 top: "out",
               },
-              speed: 8,
+              speed: 6,
             },
             number: {
               density: {
@@ -85,7 +85,7 @@ function Particle() {
                 max: 0.5,
               },
               animation: {
-                speed: 1,
+                speed: 0.8,
                 minimumValue: 0.1,
               },
             },
@@ -106,8 +106,8 @@ function Particle() {
                 minimumValue: 100,
               },
               value: {
-                min: 100,
-                max: 160,
+                min: 50,
+                max: 80,
               },
               animation: {
                 minimumValue: 40,
