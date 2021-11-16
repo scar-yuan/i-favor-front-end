@@ -1,29 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
+
 import LoginText from "../../components/animate/LoginText";
 import MyParticles from "../../components/animate/Particle";
-// import axios from "axios";
+import instance from "../../utils/http";
+
 import { Form, Input, Button, Checkbox, Tabs, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
+
+import { LoginContext, USER_LOGIN } from "../../store/context";
+
 import { LoginWrap } from "./StyledLogin";
 import logo from "../../assets/logo/logo192.png";
+
 function Login() {
   const history = useHistory();
+  const { dispatch } = useContext(LoginContext);
   const [currentTab, setCurrentTab] = useState("1");
   const onFinishRegister = (values) => {
-    // axios.post('/login',{
-    //   ...values
-    // })
-    successRegister();
-    console.log(values);
+    instance
+      .post("/user/register", {
+        username: values.username,
+        password: values.password,
+      })
+      .then((res) => {
+        successRegister();
+        console.log(res);
+      },(err)=>{
+        errorRegister();
+        console.log(err);
+      });
   };
   const onFinishLogin = (values) => {
-    // axios.get('/login',{
-    //   ...values
-    // })
-    successLogin();
-    history.push("/");
-    console.log(values);
+    instance
+      .post("/user/login", {
+        username: values.username,
+        password: values.password,
+      })
+      .then(
+        (res) => {
+          successLogin();
+          localStorage.setItem("token",JSON.stringify({...res.data.data,isLogin:true}));
+          dispatch({ type: USER_LOGIN, userLogin:{...res.data.data,isLogin:true}})
+          history.push("/");
+          console.log(res);
+        },
+        (err) => {
+          errorLogin();
+          console.log(err);
+        }
+      );
   };
   const successLogin = () => {
     message.success("登录成功");
@@ -34,6 +60,9 @@ function Login() {
   };
   const successRegister = () => {
     message.success("注册成功");
+  };
+  const errorRegister = () => {
+    message.success("用户名被占用");
   };
   const [form1, form2] = Form.useForm();
   const { TabPane } = Tabs;
