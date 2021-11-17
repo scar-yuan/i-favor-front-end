@@ -8,23 +8,30 @@ import TodoCard from "./components/TodoCard";
 import CollectionCard from "./components/CollectionCard";
 import BigTime from "./components/BigTime";
 import SearchView from "./components/SearchView";
-import setDarkTheme from "../../assets/untils/darkTheme";
+// import setDarkTheme from "../../assets/untils/darkTheme";
 
-import { LoginContext, USER_LOGOUT } from "../../store/context";
+import { LoginContext, USER_LOGOUT, ThemeContext } from "../../store/context";
 function Home(props) {
   const [login, setLogin] = useState(false);
   const [themeState, setThemeState] = useState(false); // false 是浅色，true 是深色
-  const { loginState,dispatch } = useContext(LoginContext);
+  const { loginState, dispatch } = useContext(LoginContext);
+  // 采用全局样式
+  const [themeType, setThemeType] = useContext(ThemeContext);
+  const onChange = () => {
+    setThemeType(!themeType);
+    localStorage.setItem("theme", !themeType);
+  };
   // 初始化主题状态
-  useEffect(() => {
-    const initTheme = async () => {
-      const theme = await localStorage.getItem("theme");
-      // 获取本地数据
-      setThemeState(!!theme);
-      setDarkTheme(!!theme);
-    };
-    initTheme();
-  }, []);
+  // useEffect(() => {
+  //   const initTheme = async () => {
+  //     const theme = await localStorage.getItem("theme");
+  //     // 获取本地数据
+  //     setThemeState(!!theme);
+  //     setDarkTheme(!!theme);
+  //   };
+  //   initTheme();
+  // }, []);
+
   //设置登录态
   useEffect(() => {
     setLogin(loginState.isLogin);
@@ -39,11 +46,11 @@ function Home(props) {
     });
   };
 
-  const onChange = () => {
-    setThemeState(!themeState);
-    setDarkTheme(!!themeState);
-    localStorage.setItem("theme", themeState);
-  };
+  // const onChange = () => {
+  //   setThemeState(!themeState);
+  //   setDarkTheme(!!themeState);
+  //   localStorage.setItem("theme", themeState);
+  // };
   return (
     <div>
       <Row justify="space-between">
@@ -64,7 +71,7 @@ function Home(props) {
 
         {/* 模式切换 */}
         <Switch
-          checked={!!themeState}
+          checked={themeState}
           style={{ margin: "5px 5px 0px 0px" }}
           checkedChildren="白天"
           unCheckedChildren="黑夜"
@@ -82,10 +89,12 @@ function Home(props) {
   );
 }
 
+
 const Section = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   margin: 50px 100px 0px 100px;
 `;
+
 export default Home;
