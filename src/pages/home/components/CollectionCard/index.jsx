@@ -17,12 +17,11 @@ const CollectionCard = ({ searchData }) => {
       let endIndex = i + Count < data.length ? i + Count : data.length;
       sliceItems.push(data.slice(i, endIndex));
     }
-    console.log(sliceItems);
   }
   const items = [];
   for (let i = 0; i < sliceItems.length; i++) {
     items.push(<div><List
-      itemLayout="horizontal"
+      // itemLayout="horizontal"
       dataSource={sliceItems[i]}
       renderItem={item => (
         <Button type="link" href={item.href} target="_blank">
@@ -45,7 +44,15 @@ const CollectionCard = ({ searchData }) => {
   }
   return (
     <NewCard>
-      <Carousel style={{ margin: "20px 0px", padding: "10px 0" }} autoplay dotPosition={"bottom"} dots={false}>
+      <Carousel
+        draggable={true}
+        adaptiveHeight={true}
+        style={{ margin: "20px 0px", padding: "10px 0" }}
+        autoplay
+        infinite
+        dotPosition={"bottom"}
+        dots={false}
+      >
         {items}
       </Carousel>
       <ButtonBox>
@@ -79,10 +86,10 @@ const NewCard = styled(Card)`
     transform: translateY(-10px);
   }
 `
-const SearchList = styled(List)`
-  height: 250px;
-  overflow:hidden;
-`
+// const SearchList = styled(List)`
+//   height: 250px;
+//   overflow:hidden;
+// `
 // 无ico时渲染的 字体样式
 const IconFont = styled.div`
     display: flex;
