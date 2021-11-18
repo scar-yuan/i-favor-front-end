@@ -63,7 +63,7 @@ const SortCollect = (props) => {
           ...values,
           nanoid: nanoid(),
           type: "site",
-          icon: `${values.href}/favicon.ico`,
+          icon: "",
           children: [],
         },
         ...data,
@@ -305,9 +305,7 @@ const SortCollect = (props) => {
   };
   const handleSave = () => {
     console.log(data);
-    instance.put('/favor',{
-      ...data
-    }).then((res)=>{
+    instance.put('/favor',{bookmark:data}).then((res)=>{
       console.log(res);
     },(err)=>{
       console.log(err);

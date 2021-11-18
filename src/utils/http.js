@@ -9,12 +9,13 @@ const instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
   function (config) {
-    console.log(config);
-    if (window.localStorage.getItem("token")) {
-      axios.defaults.headers.common["Authorization"] =
-        `Bearer ` + window.localStorage.getItem("token").token;
+    console.log("启动");
+    if (localStorage.getItem("token")) {
+      const token = JSON.parse(localStorage.getItem("token")).token;
+      console.log(token);
+      instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     } else {
-      delete axios.defaults.headers.common["Authorization"];
+      delete instance.defaults.headers.common["Authorization"];
     }
     // console.log('请求拦截器 成功');
     return config;

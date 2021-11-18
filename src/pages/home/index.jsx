@@ -34,7 +34,8 @@ function Home(props) {
             onOk() {
                 message.success('退出成功！')
                 localStorage.removeItem("token");
-                localStorage.removeItem("flatFavor")
+                localStorage.removeItem("flatFavor");
+                localStorage.removeItem("originalFavor")
                 dispatch({
                     type: USER_LOGOUT,
                     userLogout: { username: "", token: "", isLogin: false },
