@@ -23,7 +23,7 @@ const NewCard = styled(Card)`
   color: var(--font-fg);
   border: none;
   position: relative;
-  width: 300px;
+  min-width: 300px;
   border-radius: 25px; 
   background: linear-gradient(145deg, var(--card-bg), var(--card-fg));
   box-shadow:  5px 5px 10px var(--card-sd),

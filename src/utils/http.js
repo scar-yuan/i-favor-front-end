@@ -37,7 +37,7 @@ instance.interceptors.response.use(
       window.location.href = "/login"; //返回登录页
       return Promise.reject("用户token失效"); //接口Promise返回错误状态，错误信息msg可有后端返回，也可以我们自己定义一个码--信息的关系。
     }
-    if (response.status !== 200 || response.data.code !== "20001") {
+    if (response.status !== 200) {
       //接口请求失败，具体根据实际情况判断
       return Promise.reject("状态码错误"); //接口Promise返回错误状态
     }

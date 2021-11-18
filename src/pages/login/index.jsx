@@ -11,27 +11,36 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { LoginContext, USER_LOGIN } from "../../store/context";
 
 import { LoginWrap } from "./StyledLogin";
-import logo from "../../assets/logo/logo192.png";
+import logo from "../../assets/logo/logo.png";
 
 function Login() {
   const history = useHistory();
   const { dispatch } = useContext(LoginContext);
   const [currentTab, setCurrentTab] = useState("1");
+  const [isLoading, setIsLoading] = useState(false) // 登录loading
+  const [isFinishRegister, setIsFinishRegister] = useState(false)
   const onFinishRegister = (values) => {
+    setIsFinishRegister(true)
     instance
       .post("/user/register", {
         username: values.username,
         password: values.password,
       })
-      .then((res) => {
-        successRegister();
-        console.log(res);
-      },(err)=>{
-        errorRegister();
-        console.log(err);
+      .then(
+        (res) => {
+          successRegister();
+          console.log(res);
+        },
+        err => {
+          errorRegister();
+          console.log(err);
+        })
+      .finally(() => {
+        setIsFinishRegister(false)
       });
   };
   const onFinishLogin = (values) => {
+    setIsLoading(true)
     instance
       .post("/user/login", {
         username: values.username,
@@ -40,8 +49,8 @@ function Login() {
       .then(
         (res) => {
           successLogin();
-          localStorage.setItem("token",JSON.stringify({...res.data.data,isLogin:true}));
-          dispatch({ type: USER_LOGIN, userLogin:{...res.data.data,isLogin:true}})
+          localStorage.setItem("token", JSON.stringify({ ...res.data.data, isLogin: true }));
+          dispatch({ type: USER_LOGIN, userLogin: { ...res.data.data, isLogin: true } })
           history.push("/");
           console.log(res);
         },
@@ -49,7 +58,10 @@ function Login() {
           errorLogin();
           console.log(err);
         }
-      );
+      )
+      .finally(() => {
+        setIsLoading(false)
+      });
   };
   const successLogin = () => {
     message.success("登录成功");
@@ -59,10 +71,11 @@ function Login() {
     message.error("账号或密码错误");
   };
   const successRegister = () => {
+    console.log(111);
     message.success("注册成功");
   };
   const errorRegister = () => {
-    message.success("用户名被占用");
+    message.error("用户名被占用");
   };
   const [form1, form2] = Form.useForm();
   const { TabPane } = Tabs;
@@ -133,7 +146,7 @@ function Login() {
                 height="80px"
               />
             </div>
-            <div className="form-title">sign in to ifavor</div>
+            <div className="form-title">Sign in to iFavor</div>
             {/* 注册登陆切换 */}
             <Tabs
               defaultActiveKey="1"
@@ -161,12 +174,12 @@ function Login() {
                       rules={
                         currentTab === "1"
                           ? [
-                              {
-                                // validator: checkUser,
-                                required: true,
-                                message: "请输入用户名",
-                              },
-                            ]
+                            {
+                              // validator: checkUser,
+                              required: true,
+                              message: "请输入用户名",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -183,11 +196,11 @@ function Login() {
                       rules={
                         currentTab === "1"
                           ? [
-                              {
-                                validator: checkPassword,
-                                // message: "Please input your passwprd",
-                              },
-                            ]
+                            {
+                              validator: checkPassword,
+                              // message: "Please input your passwprd",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -217,6 +230,7 @@ function Login() {
                         type="primary"
                         htmlType="submit"
                         className="login-form-button"
+                        loading={isLoading}
                       >
                         立即进入
                       </Button>
@@ -238,11 +252,11 @@ function Login() {
                       rules={
                         currentTab === "2"
                           ? [
-                              {
-                                validator: checkUser,
-                                // message: "Please input your nickname",
-                              },
-                            ]
+                            {
+                              validator: checkUser,
+                              // message: "Please input your nickname",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -259,11 +273,11 @@ function Login() {
                       rules={
                         currentTab === "2"
                           ? [
-                              {
-                                validator: checkPassword,
-                                // message: "Please input your passwprd",
-                              },
-                            ]
+                            {
+                              validator: checkPassword,
+                              // message: "Please input your passwprd",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -281,6 +295,7 @@ function Login() {
                         type="primary"
                         htmlType="submit"
                         className="login-form-button"
+                        loading={isFinishRegister}
                       >
                         注册
                       </Button>

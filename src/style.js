@@ -44,6 +44,7 @@ body::-webkit-scrollbar{
     props.dark ? "#252525" : "#c4c4c4"}; // 卡片阴影第一个颜色
   --card-sf: ${(props) =>
     props.dark ? "#313131" : "#ffffff"}; // 卡片阴影第二个颜色
+  --hover-fg: ${(props) => (props.dark ? "#fff" : "#000")};
   --primary-btn-bg: #000; // 
   --primary-btn-fg: #fff;
   --secondary-btn-bg: #ff0000;
