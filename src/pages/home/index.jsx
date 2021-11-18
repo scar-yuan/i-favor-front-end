@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 // import { Link } from 'react-router-dom'
 import styled from "styled-components";
-import { Button, Row, Switch, Avatar } from "antd";
+import { Button, Row, Switch, Avatar, Modal, message } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import StudyCard from "./components/StudyCard";
 import TodoCard from "./components/TodoCard";
@@ -27,12 +27,21 @@ function Home(props) {
     }, [loginState]);
 
     const handleLogout = () => {
-        console.log("退出登录");
-        localStorage.removeItem("token");
-        dispatch({
-            type: USER_LOGOUT,
-            userLogout: { username: "", token: "", isLogin: false },
-        });
+        Modal.confirm({
+            title: '你确定要退出吗',
+            content: '退出后无法使用过多服务噢~',
+            okText: '确定',
+            onOk() {
+                message.success('退出成功！')
+                localStorage.removeItem("token");
+                localStorage.removeItem("flatFavor")
+                dispatch({
+                    type: USER_LOGOUT,
+                    userLogout: { username: "", token: "", isLogin: false },
+                });
+            }
+        })
+
     };
     return (
         <div>
@@ -44,12 +53,12 @@ function Home(props) {
                             style={{ margin: "5px 5px 0px 5px" }}
                             icon={<UserOutlined />}
                         />
-                        <span onClick={handleLogout}>{loginState.username}</span>
+                        <span style={{ color: "var(--font-fg)", cursor: "pointer" }} onClick={handleLogout}>{loginState.username}</span>
                     </Row>
                 ) : (
-                    <Button type="link" href="/login">
+                    <LoginButton type="link" href="/login">
                         登录
-                    </Button>
+                    </LoginButton>
                 )}
 
                 {/* 模式切换 */}
@@ -79,5 +88,20 @@ const Section = styled.section`
   justify-content: space-around;
   margin: 50px 100px 0px 100px;
 `;
-
+const LoginButton = styled(Button)`
+    margin: 10px;
+    color: var(--font-fg);
+    border: none;
+    border-radius: 10px; 
+    background: linear-gradient(145deg, var(--card-bg), var(--card-fg));
+    box-shadow:  5px 5px 10px var(--card-sd),
+                -5px -5px 10px var(--card-sf);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    :hover {
+        color: var(--hover-fg);
+        color: #2b2b2b;
+        background-color: #fff;
+    }
+`
 export default Home;

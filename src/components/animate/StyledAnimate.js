@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 const CombinedWrapper = styled.div`
+  user-select: none;
   .combined-reload {
     position: absolute;
     bottom: 16px;

@@ -120,7 +120,7 @@ function LoginText() {
               ],
             }}
           >
-            i fover
+            i Favor
           </Texty>
           <TweenOne
             className="combined-bar"
@@ -131,7 +131,7 @@ function LoginText() {
               type: "from",
               ease: "easeInOutExpo",
             }}
-          />
+          /> 
           <Texty
             className="content"
             type="bottom"

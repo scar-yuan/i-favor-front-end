@@ -20,6 +20,7 @@ import { IconButton, IconDiv, IconFont } from './components/RightDrawer';
 export default function Collection() {
     const [favor, setFavor] = useState([])
     const [isTemp, setIsTemp] = useState(false) // 是否使用临时数据
+    const [isDataTips, setIsDataTips] = useState(false) // 设置使用数据提示
     const [rightVisible, setRightVisible] = useState(false); // 右边drawer打开状态
     const [leftVisible, setLeftVisible] = useState(false)   // 左侧 drawer 打开状态
     const [stepVisible, setStepVisible] = useState(false) //控制顶部 step 打开状态
@@ -41,11 +42,9 @@ export default function Collection() {
             let parseData = JSON.parse(localData)
             if (parseData == null) {
                 // 使用临时数据
-                console.log('使用临时数据' + favor);
                 setIsTemp(true)
             } else {
                 // 不使用临时数据
-                console.log('被调用');
                 setIsTemp(false)
                 setFavor(JSON.parse(localData)?.filter(item => item.type === 'site'))
             }
@@ -53,14 +52,36 @@ export default function Collection() {
         initFavor()
     }, [])
     // 测试的时候采用接口工具获取到的 token
+<<<<<<< HEAD
     const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTkyOTJhZGM1NmU4NmFkZWM5Y2E4ZTAiLCJpYXQiOjE2MzcyMzY0NTcsImV4cCI6MTYzNzI0MDA1N30.IDazAThCsAMmUVioAGhOMq5lW_IAdoXZ_OB_3SHjocM`
+=======
+    // const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTkyNmU4ZWM1NmU4NmFkZWM5Y2E4YTkiLCJpYXQiOjE2MzcwODE5NzEsImV4cCI6MTYzNzA4NTU3MX0.9Ua_1TIlA337_BxqDx-CUADizR1gZ7VAwQfMm9uA43Q`
+    const token = JSON.parse(localStorage.getItem("token"))?.token
+    // isTemp 为 true 展示临时数据，表示用户为上传数据
+    if (token && !isTemp) {
+        // 已登录，不使用临时数据
+        message.success('你已登录，展示您的数据')
+    } else if (token && isTemp) {
+        // 已登录，采用了临时数据
+        message.info('你还没有导入文件夹噢，为您展示我们的推荐网站')
+    } else {
+        message.info('您还没有登录噢~，为您展示我们的推荐网站')
+    }
+    // Upload 组件的 props
+>>>>>>> 4779823e10a532bb97690a226ba4225ecbcde739
     const uploadProps = {
         name: "bookmarkHTML",
         accept: ".html",
         action: '/api/favor',
         headers: {
+<<<<<<< HEAD
             Authorization: `Bearer ${token}`
         },
+=======
+            Authorization: `Bearer ` + token
+        },
+        showUploadList: false,
+>>>>>>> 4779823e10a532bb97690a226ba4225ecbcde739
         maxCount: 1,
         progress: {
             strokeColor: {
@@ -75,13 +96,19 @@ export default function Collection() {
             if (info.file.status === 'done') {
                 message.success(`文件解析成功`);
                 const { data, code } = info.file.response
+<<<<<<< HEAD
                 // 20003 更新了数据，20004 未更新
                 if (code === "20003" || !localStorage.getItem("flatFavor")) {
                     console.log(data);
+=======
+                // 20003 更新了数据，20004 未更新 ，字符串
+                if (code === "20003" && !localStorage.getItem("flatFavor")) {
+>>>>>>> 4779823e10a532bb97690a226ba4225ecbcde739
                     let temp = flatten(data) // 扁平化
                     let saveData = temp.filter(item => item.type === 'site') // 过滤出网站
                     setIsTemp(false) // 立即修改状态为，不使用临时数据
                     setFavor(saveData) // 保存到当前的状态重
+                    console.log(1111);
                     // 持久化存储到本地
                     localStorage.setItem('originalFavor', JSON.stringify(data))
                     localStorage.setItem('flatFavor', JSON.stringify(saveData))
@@ -365,6 +392,7 @@ const OpenButton = styled(Button)`
     cursor: pointer;
     :hover {
         color: #2b2b2b;
+        background-color: #fff;
     } 
 `
 // 首页主拖拽区

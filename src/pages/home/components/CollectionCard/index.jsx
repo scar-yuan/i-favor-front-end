@@ -51,6 +51,7 @@ const ButtonBox = styled.div`
     bottom: 30px;
 `
 const NewCard = styled(Card)`
+  min-width: 500px;
   height: 350px;
   color: var(--font-fg);
   border: none;
