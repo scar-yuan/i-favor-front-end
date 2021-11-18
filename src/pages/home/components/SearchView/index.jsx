@@ -54,6 +54,7 @@ const Input = styled.input`
     outline: none;
     border: none;
     border-radius: 25px; 
+    user-select: none;
     background: linear-gradient(145deg, var(--card-bg), var(--card-fg));
     box-shadow: 5px 5px 10px var(--card-sd),
                -5px -5px 10px var(--card-sf);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Upload, message, Button, List, Popover } from 'antd';
+import { Upload, message, Button, List, Popover, Spin, Alert } from 'antd';
 import { UploadOutlined, AppstoreOutlined, QuestionCircleOutlined, DeploymentUnitOutlined, AlignLeftOutlined, HomeOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
@@ -19,7 +19,8 @@ import { ItemTypes } from './Constants';
 export default function Collection() {
     const [favor, setFavor] = useState([])
     const [isTemp, setIsTemp] = useState(false) // 是否使用临时数据
-    const [isDataTips, setIsDataTips] = useState(false) // 设置使用数据提示
+    const [isLoadingUpload, setIsLoadingUpload] = useState(false) // 是否展示全局loading
+    // const [isDataTips, setIsDataTips] = useState(false) // 设置使用数据提示
     const [rightVisible, setRightVisible] = useState(false); // 右边drawer打开状态
     const [leftVisible, setLeftVisible] = useState(false)   // 左侧 drawer 打开状态
     const [stepVisible, setStepVisible] = useState(false) //控制顶部 step 打开状态
@@ -42,9 +43,11 @@ export default function Collection() {
             if (parseData == null) {
                 // 使用临时数据
                 setIsTemp(true)
+                message.info('您还没有登录或者导入收藏夹噢~，为您展示推荐网站')
             } else {
                 // 不使用临时数据
                 setIsTemp(false)
+                message.success('您已登录为您加载您的数据')
                 setFavor(JSON.parse(localData)?.filter(item => item.type === 'site'))
             }
         }
@@ -54,15 +57,6 @@ export default function Collection() {
     // const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTkyNmU4ZWM1NmU4NmFkZWM5Y2E4YTkiLCJpYXQiOjE2MzcwODE5NzEsImV4cCI6MTYzNzA4NTU3MX0.9Ua_1TIlA337_BxqDx-CUADizR1gZ7VAwQfMm9uA43Q`
     const token = JSON.parse(localStorage.getItem("token"))?.token
     // isTemp 为 true 展示临时数据，表示用户为上传数据
-    if (token && !isTemp) {
-        // 已登录，不使用临时数据
-        message.success('你已登录，展示您的数据')
-    } else if (token && isTemp) {
-        // 已登录，采用了临时数据
-        message.info('你还没有导入文件夹噢，为您展示我们的推荐网站')
-    } else {
-        message.info('您还没有登录噢~，为您展示我们的推荐网站')
-    }
     // Upload 组件的 props
     const uploadProps = {
         name: "bookmarkHTML",
@@ -71,6 +65,7 @@ export default function Collection() {
         headers: {
             Authorization: `Bearer ` + token
         },
+        disabled: !token,
         showUploadList: false,
         maxCount: 1,
         progress: {
@@ -83,8 +78,12 @@ export default function Collection() {
         },
         // 上传文件格式判断
         onChange(info) {
+            if (info.file.status === 'uploading') {
+                setIsLoadingUpload(true)
+            }
             if (info.file.status === 'done') {
                 message.success(`文件解析成功`);
+                setIsLoadingUpload(false)
                 const { data, code } = info.file.response
                 // 20003 更新了数据，20004 未更新 ，字符串
                 if (code === "20003" && !localStorage.getItem("flatFavor")) {
@@ -92,15 +91,21 @@ export default function Collection() {
                     let saveData = temp.filter(item => item.type === 'site') // 过滤出网站
                     setIsTemp(false) // 立即修改状态为，不使用临时数据
                     setFavor(saveData) // 保存到当前的状态重
-                    console.log(1111);
                     // 持久化存储到本地
                     localStorage.setItem('originalFavor', JSON.stringify(data))
                     localStorage.setItem('flatFavor', JSON.stringify(saveData))
                 }
             } else if (info.file.status === 'error') {
+                setIsLoadingUpload(false)
                 message.error(`文件解析失败`);
             }
         },
+    }
+    // 未登录提示
+    const handleTips = () => {
+        if(!token) {
+            message.warn("你还没有登录噢，请先登录再进行操作")
+        }
     }
     // 打开抽屉的按钮
     const showLeftDrawer = () => {
@@ -129,8 +134,8 @@ export default function Collection() {
         setSortVisible(false)
     }
     return (
-
-        <CollectionContainer>
+        <CollectionContainer isLoadingUpload={isLoadingUpload}>
+            <SpinPosition size="large" spinning={isLoadingUpload} />
             {/* 定位 + flex 布局 */}
             {/* <BackButton /> */}
             <ButtonBox>
@@ -168,7 +173,7 @@ export default function Collection() {
                         placement="right"
                         content={"上传收藏夹"}
                     >
-                        <UploadButton icon={<UploadOutlined />}></UploadButton>
+                        <UploadButton onClick={handleTips} icon={<UploadOutlined />}></UploadButton>
                     </Popover>
 
                 </Upload>
@@ -237,7 +242,7 @@ export default function Collection() {
                         <List.Item ref={dragRef} style={{ opacity }}>
                             <IconButton type="link" href={item.href} target="_blank">
                                 <IconDiv
-                                    style={{ width: "80px", height: "80px", cursor: "move" }}
+                                    style={{ width: "80px", height: "80px" }}
                                 >
                                     {/* <img style={{ width: "48px", height: "48px" }} src={item.href + 'favicon.ico'} alt={item.name} /> */}
                                     <IconFont
@@ -266,6 +271,7 @@ const CollectionContainer = styled.div`
     display: flex;
     justify-content: center;
     height: 100vh;
+    overflow-y: ${props => props.isLoadingUpload ? "hidden" : ""};
     .list{
         color: var(--font-fg);
         border: none;
@@ -283,6 +289,16 @@ const CollectionContainer = styled.div`
         background-color: red;
     }
 }
+`
+const SpinPosition = styled(Spin)`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0,0,0,.5);
+    text-align: center;
+    line-height: 100vh;
+    z-index: 100;
+    overflow-y: hidden;
 `
 // 网站列表
 export const ListSite = styled(List)`
