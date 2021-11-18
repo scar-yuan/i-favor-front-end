@@ -54,15 +54,14 @@ function Login() {
   const successLogin = () => {
     message.success("登录成功");
   };
-
   const errorLogin = () => {
-    message.error("账号或密码错误");
+    message.error("登陆失败");
   };
   const successRegister = () => {
     message.success("注册成功");
   };
   const errorRegister = () => {
-    message.success("用户名被占用");
+    message.error("注册失败");
   };
   const [form1, form2] = Form.useForm();
   const { TabPane } = Tabs;

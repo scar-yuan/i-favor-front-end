@@ -16,14 +16,14 @@ export default function Collection() {
         }
         initFavor()
     }, [])
-    const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTkyNmU4ZWM1NmU4NmFkZWM5Y2E4YTkiLCJpYXQiOjE2MzcwODE5NzEsImV4cCI6MTYzNzA4NTU3MX0.9Ua_1TIlA337_BxqDx-CUADizR1gZ7VAwQfMm9uA43Q`
+    // const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTkyNmU4ZWM1NmU4NmFkZWM5Y2E4YTkiLCJpYXQiOjE2MzcwODE5NzEsImV4cCI6MTYzNzA4NTU3MX0.9Ua_1TIlA337_BxqDx-CUADizR1gZ7VAwQfMm9uA43Q`
     const uploadProps = {
         name: "bookmarkHTML",
         accept: ".html",
         action: '/api/favor',
-        headers: {
-            Authorization: `Bearer ${token}`
-        },
+        // headers: {
+        //     Authorization: `Bearer ${token}`
+        // },
         maxCount: 1,
         progress: {
             strokeColor: {

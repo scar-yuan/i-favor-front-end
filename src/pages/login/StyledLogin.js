@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 const LoginWrap = styled.div`
   height: 100vh;
+  min-height: 600px;
   width: 100%;
   min-width: 1024px;
   display: flex;
