@@ -9,6 +9,7 @@ const MyFavorList = ({ favor, leftVisible, onCloseLeft }) => {
             placement="right"
             onClose={onCloseLeft}
             visible={leftVisible}
+            closable={false}
             bodyStyle={{
                 padding: "0px"
             }}

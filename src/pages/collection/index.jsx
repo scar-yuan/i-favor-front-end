@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react'
 import { Upload, message, Button, List, Popover, Spin } from 'antd';
 import { UploadOutlined, AppstoreOutlined, QuestionCircleOutlined, DeploymentUnitOutlined, AlignLeftOutlined, HomeOutlined } from '@ant-design/icons';
@@ -237,7 +236,7 @@ export default function Collection() {
                         md: 4,
                         lg: 6,
                         xl: 8,
-                        xxl: 3,
+                        xxl: 10
                     }}
                     dataSource={isTemp ? recommendSite : favor}
                     renderItem={item => (
