@@ -93,7 +93,7 @@ export default function Collection() {
                     let saveData = temp.filter(item => item.type === 'site') // 过滤出网站
                     setIsTemp(false) // 立即修改状态为，不使用临时数据
                     setFavor(saveData) // 保存到当前的状态重
-                    console.log(1111);
+                    // console.log(1111);
                     // 持久化存储到本地
                     localStorage.setItem('originalFavor', JSON.stringify(data))
                     localStorage.setItem('flatFavor', JSON.stringify(saveData))

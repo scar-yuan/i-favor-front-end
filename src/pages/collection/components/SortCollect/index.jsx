@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 import { CloseCircleTwoTone } from "@ant-design/icons";
 import { cloneDeep } from "lodash";
 import { Container, Draggable } from "react-smooth-dnd";
+import instance from "../../../../utils/http";
 import NewForm from "../form/Form";
 import {
   ListWrap,
@@ -101,7 +102,8 @@ const SortCollect = (props) => {
   const onGetIndex = (item, tempData, indexArr, lastIndex) => {
     tempData.length > 0 &&
       tempData.forEach((ele, index) => {
-        if (item.name === ele.name) {
+        // 修改
+        if (item.nanoid === ele.nanoid) {
           if (lastIndex !== undefined) {
             indexArr.push(lastIndex);
             indexArr.push(index);
@@ -303,6 +305,13 @@ const SortCollect = (props) => {
   };
   const handleSave = () => {
     console.log(data);
+    instance.put('/favor',{
+      ...data
+    }).then((res)=>{
+      console.log(res);
+    },(err)=>{
+      console.log(err);
+    })
     setIsShowDelete(false);
   };
   // 新建文件夹
