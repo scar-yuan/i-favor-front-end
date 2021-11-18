@@ -16,9 +16,9 @@ const ButtonWrap = styled(Button).attrs({
     href: "/",
     type: "link"
 })`
-position: absolute;
-top: 5px;
-left: 5px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
     button {
         display: flex;
         height: 3em;
