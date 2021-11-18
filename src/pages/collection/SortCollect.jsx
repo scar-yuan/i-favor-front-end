@@ -1,16 +1,55 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
+import { Drawer, Button, Radio, Space,Modal } from "antd"; // 测试
+// import {CloseCircleTwoTone} from '@ant-design/icons';
 import { cloneDeep } from "lodash";
 import { Container, Draggable } from "react-smooth-dnd";
-import { ListWrap } from "./IndexPage.js";
+import NewForm from './components/form/Form'
+import {
+  ListWrap,
+  ContentWrap,
+  DraggableItemWrap,
+  TitleWrap,
+} from "./IndexPage.js";
 import test from "../../assets/testData/favor.json";
 
-const Collection = () => {
+const SortCollect = () => {
+  const [visible, setVisible] = useState(false);
+  const [isNewFolderVisible, setIsNewFolderVisible] = useState(false);
   const [data, setData] = useState([]);
   const [temp, setTemp] = useState({});
-
+  const folderForm = useRef(null);
   useEffect(() => {
     setData(test.data);
   }, []);
+  // 测试
+  const showDrawer = () => {
+    setVisible(true);
+  };
+  const onClose = () => {
+    setVisible(false);
+  };
+
+  // 模态框
+  const showNewFolderVisible = () => {
+    setIsNewFolderVisible(true);
+  };
+
+  const handleNewFolderVisibleOk = () => {
+    folderForm.current.validateFields().then((values)=>{
+      setData([{
+        ...values,
+        type:"folder",
+        icon:"",
+        children:[]
+      },...data])
+    })
+    // console.log(data);
+    setIsNewFolderVisible(false);
+  };
+
+  const handleNewFolderVisibleCancel = () => {
+    setIsNewFolderVisible(false);
+  };
 
   const onDrag = (arr = [], dragResult) => {
     const { removedIndex, addedIndex, payload } = dragResult;
@@ -162,10 +201,12 @@ const Collection = () => {
 
   // 利用递归实现列表的渲染
   const onDomRender = (renderData, parent, depth) => {
-    if (depth === 3 || renderData.length === 0) return;
+    // console.log(renderData);
+    if (depth === 3 || (parent && parent.type === "site")) {
+      return;
+    }
     return (
       <Container
-        dragClass="isdrag"
         groupName="col"
         onDrop={(value) => onDrop(value, parent, depth)}
         getChildPayload={(index) => renderData[index]}
@@ -174,22 +215,45 @@ const Collection = () => {
         {renderData.map((item) => {
           return (
             <Draggable key={item.name}>
-              <div
-                className='draggable-item'
-                style={depth === 1 ? { marginBottom: "20px" } : {}}
-              >
-                <div className="draggable-item-content">
-                  {item.name}
+              <DraggableItemWrap>
+                <div
+                  className={item.type === "folder" ? "draggable-item" : ""}
+                  style={depth === 1 ? { marginBottom: "10px" } : {}}
+                >
+                  <ContentWrap>
+                    <div
+                      className={
+                        item.type === "folder" ? "isfolder" : "notfolder"
+                      }
+                    >
+                      {item.type === "site" ? (
+                        <img
+                          className="site-ico"
+                          src={"https://www.jianshu.com/favicon.ico"}
+                          alt=""
+                        />
+                      ) : null}
+                      <p>{item.name}</p>
+                      {/* <div>
+                        <CloseCircleTwoTone twoToneColor="red"/>
+                      </div> */}
+                    </div>
+                  </ContentWrap>
+                  <div className="draggable-box">
+                    {onDomRender(item.children, item, depth + 1)}
+                  </div>
                 </div>
-                <div /* className={styles.box} */>
-                  {onDomRender(item.children, item, depth + 1)}
-                </div>
-              </div>
+              </DraggableItemWrap>
             </Draggable>
           );
         })}
       </Container>
     );
+  };
+
+  // 新建文件夹
+  const handleNewFolder = () => {
+    showNewFolderVisible();
   };
 
   useEffect(() => {
@@ -213,7 +277,56 @@ const Collection = () => {
     // console.log('temp',temp);
   }, []);
 
-  return <ListWrap>{onDomRender(data, null, 1)}</ListWrap>;
+  return (
+    <>
+      {/* 测试 */}
+      <Button
+        type="primary"
+        onClick={() => {
+          showDrawer();
+        }}
+      >
+        Primary Button
+      </Button>
+      <Drawer
+        title="收藏夹管理"
+        placement="left"
+        closable={false}
+        onClose={() => {
+          onClose();
+        }}
+        visible={visible}
+        size="large"
+        key="left"
+        drawerStyle={{ backgroundColor: "rgb(233,233,233)" }}
+      >
+        <TitleWrap>
+          <div
+            className="btn"
+            onClick={() => {
+              handleNewFolder();
+            }}
+          >
+            新建文件夹
+          </div>
+          <div className="btn">加入文件</div>
+          <div className="btn">删除文件</div>
+          <h6>*先点击删除按钮,再进行删除哦 </h6>
+        </TitleWrap>
+        <Modal
+          title="新建文件夹"
+          visible={isNewFolderVisible}
+          okText="确认"
+          cancelText="取消"
+          onOk={handleNewFolderVisibleOk}
+          onCancel={handleNewFolderVisibleCancel}
+        >
+         <NewForm ref={folderForm} type="folder"></NewForm>
+        </Modal>
+        <ListWrap>{onDomRender(data, null, 1)}</ListWrap>
+      </Drawer>
+    </>
+  );
 };
 
-export default Collection;
+export default SortCollect;
