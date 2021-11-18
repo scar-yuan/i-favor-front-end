@@ -3,7 +3,7 @@ module.exports = function (app) {
   app.use(
     "/api",
     createProxyMiddleware({
-      target: "http://v5wwje.natappfree.cc",
+      target: "http://ee7w6i.natappfree.cc",
       changeOrigin: true,
       pathRewrite: { "^/api": "" },
     })
