@@ -66,9 +66,8 @@ function Login() {
   const successLogin = () => {
     message.success("登录成功");
   };
-
   const errorLogin = () => {
-    message.error("账号或密码错误");
+    message.error("登陆失败");
   };
   const successRegister = () => {
     console.log(111);
