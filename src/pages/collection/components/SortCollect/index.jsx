@@ -1,54 +1,85 @@
-import React, { useState, useEffect,useRef } from "react";
-import { Drawer, Button, Radio, Space,Modal } from "antd"; // 测试
-// import {CloseCircleTwoTone} from '@ant-design/icons';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Modal, Drawer } from "antd";
+import { nanoid } from "nanoid";
+import { CloseCircleTwoTone } from "@ant-design/icons";
 import { cloneDeep } from "lodash";
 import { Container, Draggable } from "react-smooth-dnd";
-import NewForm from './components/form/Form'
+import NewForm from "../form/Form";
 import {
   ListWrap,
   ContentWrap,
   DraggableItemWrap,
   TitleWrap,
 } from "./IndexPage.js";
-import test from "../../assets/testData/favor.json";
+// import test from "../../../../assets/testData/favor.json";
 
-const SortCollect = () => {
-  const [visible, setVisible] = useState(false);
+const SortCollect = (props) => {
   const [isNewFolderVisible, setIsNewFolderVisible] = useState(false);
+  const [isShowDelete, setIsShowDelete] = useState(false);
+  const [isNewSiteVisible, setIsNewSiteVisible] = useState(false);
   const [data, setData] = useState([]);
   const [temp, setTemp] = useState({});
   const folderForm = useRef(null);
+  const siteForm = useRef(null);
   useEffect(() => {
-    setData(test.data);
+    console.log(props.favor);
+    setData(props.favor);
   }, []);
-  // 测试
-  const showDrawer = () => {
-    setVisible(true);
-  };
-  const onClose = () => {
-    setVisible(false);
-  };
 
   // 模态框
   const showNewFolderVisible = () => {
     setIsNewFolderVisible(true);
   };
+  const showNewSiteVisible = () => {
+    setIsNewSiteVisible(true);
+  };
 
   const handleNewFolderVisibleOk = () => {
-    folderForm.current.validateFields().then((values)=>{
-      setData([{
-        ...values,
-        type:"folder",
-        icon:"",
-        children:[]
-      },...data])
-    })
-    // console.log(data);
+    folderForm.current.validateFields().then((values) => {
+      console.log(values);
+      setData([
+        {
+          ...values,
+          nanoid: nanoid(),
+          type: "folder",
+          icon: "",
+          children: [],
+        },
+        ...data,
+      ]);
+    });
+    setTimeout(() => {
+      folderForm.current.resetFields();
+    }, 0);
     setIsNewFolderVisible(false);
+    
+  };
+
+  const handleNewSiteVisibleOk = () => {
+    siteForm.current.validateFields().then((values) => {
+      setData([
+        {
+          ...values,
+          nanoid: nanoid(),
+          type: "site",
+          icon: `${values.href}/favicon.ico`,
+          children: [],
+        },
+        ...data,
+      ]);
+    });
+    setTimeout(() => {
+      siteForm.current.resetFields();
+    }, 0);
+    setIsNewSiteVisible(false);
+    
   };
 
   const handleNewFolderVisibleCancel = () => {
     setIsNewFolderVisible(false);
+  };
+  const handleNewSiteVisibleCancel = () => {
+    setIsNewSiteVisible(false);
   };
 
   const onDrag = (arr = [], dragResult) => {
@@ -109,15 +140,14 @@ const SortCollect = () => {
         });
         const index = onGetIndex(addedParent, result, []);
         result[index[0]].children = tempData;
+      }else if (addedDepth === 3) {
+        const tempData = onDrag(addedParent.children, {
+          ...current,
+          removedIndex: null,
+        });
+        const index = onGetIndex(addedParent, result, []);
+        result[index[0]].children[index[1]].children = tempData;
       }
-      // else if (addedDepth === 3) {
-      //   const tempData = onDrag(addedParent.children, {
-      //     ...current,
-      //     removedIndex: null,
-      //   });
-      //   const index = onGetIndex(addedParent, result, []);
-      //   result[index[0]].children[index[1]].children = tempData;
-      // }
       if (removedDepth === 1) {
         result = onDrag(result, { ...current, addedIndex: null });
       } else if (removedDepth === 2) {
@@ -128,16 +158,15 @@ const SortCollect = () => {
           addedIndex: null,
         });
         result[index[0]].children = tempData;
+      }else if (removedDepth === 3) {
+        const index = onGetIndex(removedParent, result, []);
+        const parent = result[index[0]].children[index[1]];
+        const tempData = onDrag(parent.children, {
+          ...current,
+          addedIndex: null,
+        });
+        result[index[0]].children[index[1]].children = tempData;
       }
-      // else if (removedDepth === 3) {
-      //   const index = onGetIndex(removedParent, result, []);
-      //   const parent = result[index[0]].children[index[1]];
-      //   const tempData = onDrag(parent.children, {
-      //     ...current,
-      //     addedIndex: null,
-      //   });
-      //   result[index[0]].children[index[1]].children = tempData;
-      // }
 
       setData(result);
       setTemp({});
@@ -155,12 +184,11 @@ const SortCollect = () => {
           const tempData = onDrag(parent.children, dropResult);
           const index = onGetIndex(parent, result, []);
           result[index[0]].children = tempData;
+        }else if (depth === 3) {
+          const tempData = onDrag(parent.children, dropResult);
+          const index = onGetIndex(parent, result, []);
+          result[index[0]].children[index[1]].children = tempData;
         }
-        // else if (depth === 3) {
-        //   const tempData = onDrag(parent.children, dropResult);
-        //   const index = onGetIndex(parent, result, []);
-        //   result[index[0]].children[index[1]].children = tempData;
-        // }
         setData(result);
       } else if (
         temp.removedIndex === undefined &&
@@ -202,7 +230,7 @@ const SortCollect = () => {
   // 利用递归实现列表的渲染
   const onDomRender = (renderData, parent, depth) => {
     // console.log(renderData);
-    if (depth === 3 || (parent && parent.type === "site")) {
+    if (depth === 4 || (parent && parent.type === "site")) {
       return;
     }
     return (
@@ -212,9 +240,9 @@ const SortCollect = () => {
         getChildPayload={(index) => renderData[index]}
         getGhostParent={() => document.body}
       >
-        {renderData.map((item) => {
+        {renderData&&renderData.map((item) => {
           return (
-            <Draggable key={item.name}>
+            <Draggable key={item.nanoid}>
               <DraggableItemWrap>
                 <div
                   className={item.type === "folder" ? "draggable-item" : ""}
@@ -234,9 +262,14 @@ const SortCollect = () => {
                         />
                       ) : null}
                       <p>{item.name}</p>
-                      {/* <div>
-                        <CloseCircleTwoTone twoToneColor="red"/>
-                      </div> */}
+                      <div
+                        className={isShowDelete ? "show" : "hidden"}
+                        onClick={() => {
+                          handleSingleDelete(item.nanoid);
+                        }}
+                      >
+                        <CloseCircleTwoTone twoToneColor="red" />
+                      </div>
                     </div>
                   </ContentWrap>
                   <div className="draggable-box">
@@ -250,13 +283,36 @@ const SortCollect = () => {
       </Container>
     );
   };
-
+  // 删除按钮
+  const handleDelete = useCallback(() => {
+    setIsShowDelete(!isShowDelete);
+  }, [isShowDelete]);
+  // 具体删哪个
+  const handleSingleDelete = (id) => {
+    console.log(id);
+    function getFilterArr(arr, tar) {
+      return arr.filter(function(item, i) {
+          if (item.children) {
+              item.children = getFilterArr(item.children, tar)
+          }
+          return item.nanoid !== tar;
+      })
+  }
+  const filterData = getFilterArr(data,id);
+  setData(filterData);
+  };
+  const handleSave = () => {
+    console.log(data);
+    setIsShowDelete(false);
+  };
   // 新建文件夹
   const handleNewFolder = () => {
     showNewFolderVisible();
   };
-
-  useEffect(() => {
+  const handleNewSite = () => {
+    showNewSiteVisible();
+  };
+ /*  useEffect(() => {
     function flatten(array, result) {
       result = result || [];
       array.forEach((element) => {
@@ -269,33 +325,23 @@ const SortCollect = () => {
       });
       return result;
     }
-    console.log(test.data);
+    // console.log(test.data);
     // console.log(list);
-    // const res = flatten(test.data);
+    const res = flatten(test.data);
     // console.log(res);
+    // setFlatData(res);
     // console.log('data',data);
     // console.log('temp',temp);
-  }, []);
-
+  }, []); */
   return (
     <>
-      {/* 测试 */}
-      <Button
-        type="primary"
-        onClick={() => {
-          showDrawer();
-        }}
-      >
-        Primary Button
-      </Button>
       <Drawer
         title="收藏夹管理"
         placement="left"
-        closable={false}
         onClose={() => {
-          onClose();
+          props.onCloseSort();
         }}
-        visible={visible}
+        visible={props.sortVisible}
         size="large"
         key="left"
         drawerStyle={{ backgroundColor: "rgb(233,233,233)" }}
@@ -309,10 +355,32 @@ const SortCollect = () => {
           >
             新建文件夹
           </div>
-          <div className="btn">加入文件</div>
-          <div className="btn">删除文件</div>
-          <h6>*先点击删除按钮,再进行删除哦 </h6>
+          <div
+            className="btn"
+            onClick={() => {
+              handleNewSite();
+            }}
+          >
+            加入文件
+          </div>
+          <div
+            className="btn"
+            onClick={() => {
+              handleDelete();
+            }}
+          >
+            删除文件
+          </div>
+          <div
+            className="btn"
+            onClick={() => {
+              handleSave();
+            }}
+          >
+            保存
+          </div>
         </TitleWrap>
+        {/* 新建文件夹模态框 */}
         <Modal
           title="新建文件夹"
           visible={isNewFolderVisible}
@@ -321,7 +389,18 @@ const SortCollect = () => {
           onOk={handleNewFolderVisibleOk}
           onCancel={handleNewFolderVisibleCancel}
         >
-         <NewForm ref={folderForm} type="folder"></NewForm>
+          <NewForm ref={folderForm} type="folder"></NewForm>
+        </Modal>
+        {/* 新建文件模态框 */}
+        <Modal
+          title="新建文件夹"
+          visible={isNewSiteVisible}
+          okText="确认"
+          cancelText="取消"
+          onOk={handleNewSiteVisibleOk}
+          onCancel={handleNewSiteVisibleCancel}
+        >
+          <NewForm ref={siteForm} type="site"></NewForm>
         </Modal>
         <ListWrap>{onDomRender(data, null, 1)}</ListWrap>
       </Drawer>

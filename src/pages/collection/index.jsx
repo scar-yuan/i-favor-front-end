@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState} from 'react'
 import { Upload, message, Button, List, Popover } from 'antd';
 import { UploadOutlined, AppstoreOutlined, QuestionCircleOutlined, DeploymentUnitOutlined, AlignLeftOutlined, HomeOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
@@ -6,14 +6,15 @@ import styled from 'styled-components';
 import { recommendSite } from '../../assets/recommendData/recommendSite';
 import { flatten } from '../../utils/flatten';
 import MyFavorList from './components/MyFavorList';
+import SortCollect from './components/SortCollect'
 // 不用这个
 import RightDrawer from './components/RightDrawer';
 import StepDrawer from './components/StepDrawer';
 import { IconButton, IconDiv, IconFont } from './components/RightDrawer';
 // 尝试拖拽
-import { useDrag } from 'react-dnd'
+// import { useDrag } from 'react-dnd'
 // 定义拖拽类型
-import { ItemTypes } from './Constants';
+// import { ItemTypes } from './Constants';
 
 
 export default function Collection() {
@@ -24,15 +25,15 @@ export default function Collection() {
     const [stepVisible, setStepVisible] = useState(false) //控制顶部 step 打开状态
     const [sortVisible, setSortVisible] = useState(false) // 控制整理文件夹打开状态
     // 拖拽API
-    const [{ opacity }, dragRef] = useDrag(
-        () => ({
-            type: ItemTypes.SITE,
-            collect: (monitor) => ({
-                opacity: monitor.isDragging() ? 0.1 : 1
-            })
-        }),
-        []
-    )
+    // const [{ opacity }, dragRef] = useDrag(
+    //     () => ({
+    //         type: ItemTypes.SITE,
+    //         collect: (monitor) => ({
+    //             opacity: monitor.isDragging() ? 0.1 : 1
+    //         })
+    //     }),
+    //     []
+    // )
     // 初始化从本地存储中取数据
     useEffect(() => {
         const initFavor = async () => {
@@ -52,14 +53,14 @@ export default function Collection() {
         initFavor()
     }, [])
     // 测试的时候采用接口工具获取到的 token
-    const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTkyNmU4ZWM1NmU4NmFkZWM5Y2E4YTkiLCJpYXQiOjE2MzcwODE5NzEsImV4cCI6MTYzNzA4NTU3MX0.9Ua_1TIlA337_BxqDx-CUADizR1gZ7VAwQfMm9uA43Q`
+    const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTkyOTJhZGM1NmU4NmFkZWM5Y2E4ZTAiLCJpYXQiOjE2MzcyMzY0NTcsImV4cCI6MTYzNzI0MDA1N30.IDazAThCsAMmUVioAGhOMq5lW_IAdoXZ_OB_3SHjocM`
     const uploadProps = {
         name: "bookmarkHTML",
         accept: ".html",
         action: '/api/favor',
-        // headers: {
-        //     Authorization: `Bearer ${token}`
-        // },
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
         maxCount: 1,
         progress: {
             strokeColor: {
@@ -75,7 +76,8 @@ export default function Collection() {
                 message.success(`文件解析成功`);
                 const { data, code } = info.file.response
                 // 20003 更新了数据，20004 未更新
-                if (code === 20003) {
+                if (code === "20003" || !localStorage.getItem("flatFavor")) {
+                    console.log(data);
                     let temp = flatten(data) // 扁平化
                     let saveData = temp.filter(item => item.type === 'site') // 过滤出网站
                     setIsTemp(false) // 立即修改状态为，不使用临时数据
@@ -115,6 +117,8 @@ export default function Collection() {
     const onCloseSort = () => {
         setSortVisible(false)
     }
+
+
     return (
 
         <CollectionContainer>
@@ -205,7 +209,7 @@ export default function Collection() {
             {/* 右侧抽屉 */}
             <RightDrawer onCloseRight={onCloseRight} rightVisible={rightVisible} />
             {/* 整理文件夹组件写在这里，传入 onCloseSort,sortVisible,favor */}
-
+            <SortCollect onCloseSort={onCloseSort} sortVisible={sortVisible} favor={JSON.parse(localStorage.getItem("originalFavor")) }/>
             {/* 中间布局块，待分离 */}
             <CenterContainer>
                 <List
@@ -221,7 +225,7 @@ export default function Collection() {
                     dataSource={isTemp ? recommendSite : favor}
                     renderItem={item => (
                         // 拖拽
-                        <List.Item ref={dragRef} style={{ opacity }}>
+                        <List.Item /* ref={dragRef}  style={{ opacity }}*/>
                             <IconButton type="link" href={item.href} target="_blank">
                                 <IconDiv
                                     style={{ width: "80px", height: "80px", cursor: "move" }}

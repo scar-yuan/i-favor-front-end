@@ -1,4 +1,4 @@
-import React, { useReducer, useContext, useEffect, useState } from "react";
+import React, { useReducer, useEffect, useState } from "react";
 import { Route, BrowserRouter as Routes } from "react-router-dom";
 
 import Home from "./pages/home/index.jsx";

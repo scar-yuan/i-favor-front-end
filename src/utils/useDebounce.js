@@ -7,13 +7,15 @@ export function useDebounce(fn, delay, dep = []) {
     },
     [fn]
   );
-
-  return useCallback(function f(...args) {
-    if (current.timer) {
-      clearTimeout(current.timer);
-    }
-    current.timer = setTimeout(() => {
-      current.fn.call(this, ...args);
-    }, delay);
-  }, dep);
+  return useCallback(
+    function f(...args) {
+      if (current.timer) {
+        clearTimeout(current.timer);
+      }
+      current.timer = setTimeout(() => {
+        current.fn.call(this, ...args);
+      }, delay);
+    },
+    [dep]
+  );
 }

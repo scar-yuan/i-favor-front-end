@@ -27,6 +27,12 @@ const ListWrap = styled.div`
 
 const ContentWrap = styled.div`
   cursor: grab;
+  .show {
+    display: inline-block;
+  }
+  .hidden {
+    display: none;
+  }
   .notfolder {
     padding: 10px;
     margin: 10px 30px 10px 5px;
@@ -66,13 +72,13 @@ const TitleWrap = styled.div`
     margin: 0 20px 10px 0;
     border: none;
     color: #090909;
-    padding: 0.5em 1.5em;
-    font-size: 18px;
-    border-radius: 0.5em;
+    padding: 0.3em 1.1em;
+    font-size: 14px;
+    border-radius: 0.3em;
     background: #e8e8e8;
     border: 1px solid #e8e8e8;
     transition: all 0.3s;
-    box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+    box-shadow: 3px 3px 6px #c5c5c5, -3px -3px 6px #ffffff;
     &:hover {
       border: 1px solid white;
     }
