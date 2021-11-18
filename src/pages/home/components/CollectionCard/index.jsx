@@ -19,7 +19,7 @@ const CollectionCard = ({ searchData }) => {
           }}
           dataSource={searchData}
           renderItem={item => (
-            <Button type="link" href={item.href}>
+            <Button type="link" href={item.href} target="_blank">
               <IconDiv>
                 {/* <img style={{ width: "48px", height: "48px" }} src={item.href + 'favicon.ico'} alt={item.name} /> */}
                 <IconFont>

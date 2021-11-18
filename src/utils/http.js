@@ -10,9 +10,10 @@ const instance = axios.create({
 instance.interceptors.request.use(
   function (config) {
     console.log(config);
-    if (window.localStorage.getItem("token")) {
-      axios.defaults.headers.common["Authorization"] =
-        `Bearer ` + window.localStorage.getItem("token");
+    console.log("启动");
+    const token = JSON.stringify(localStorage.getItem("token")).token;
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ` + token;
     } else {
       delete axios.defaults.headers.common["Authorization"];
     }
