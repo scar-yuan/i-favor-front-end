@@ -12,81 +12,64 @@ import SearchView from "./components/SearchView";
 
 import { LoginContext, USER_LOGOUT, ThemeContext } from "../../store/context";
 function Home(props) {
-  const [login, setLogin] = useState(false);
-  const [themeState, setThemeState] = useState(false); // false 是浅色，true 是深色
-  const { loginState, dispatch } = useContext(LoginContext);
-  // 采用全局样式
-  const [themeType, setThemeType] = useContext(ThemeContext);
-  const onChange = () => {
-    setThemeType(!themeType);
-    localStorage.setItem("theme", !themeType);
-  };
-  // 初始化主题状态
-  // useEffect(() => {
-  //   const initTheme = async () => {
-  //     const theme = await localStorage.getItem("theme");
-  //     // 获取本地数据
-  //     setThemeState(!!theme);
-  //     setDarkTheme(!!theme);
-  //   };
-  //   initTheme();
-  // }, []);
+    const [login, setLogin] = useState(false);
+    const { loginState, dispatch } = useContext(LoginContext);
+    // 采用全局样式，用这个就行了
+    const [themeType, setThemeType] = useContext(ThemeContext);
+    const [searchData, setSearchData] = useState({})
+    const onChange = () => {
+        setThemeType(!themeType);
+        localStorage.setItem("theme", !themeType);
+    };
+    //设置登录态
+    useEffect(() => {
+        setLogin(loginState.isLogin);
+    }, [loginState]);
 
-  //设置登录态
-  useEffect(() => {
-    setLogin(loginState.isLogin);
-  }, [loginState]);
+    const handleLogout = () => {
+        console.log("退出登录");
+        localStorage.removeItem("token");
+        dispatch({
+            type: USER_LOGOUT,
+            userLogout: { username: "", token: "", isLogin: false },
+        });
+    };
+    return (
+        <div>
+            <Row justify="space-between">
+                {login ? (
+                    <Row align="middle">
+                        <Avatar
+                            size="small"
+                            style={{ margin: "5px 5px 0px 5px" }}
+                            icon={<UserOutlined />}
+                        />
+                        <span onClick={handleLogout}>{loginState.username}</span>
+                    </Row>
+                ) : (
+                    <Button type="link" href="/login">
+                        登录
+                    </Button>
+                )}
 
-  const handleLogout = () => {
-    console.log("退出登录");
-    localStorage.removeItem("token");
-    dispatch({
-      type: USER_LOGOUT,
-      userLogout: { username: "", token: "", isLogin: false },
-    });
-  };
-
-  // const onChange = () => {
-  //   setThemeState(!themeState);
-  //   setDarkTheme(!!themeState);
-  //   localStorage.setItem("theme", themeState);
-  // };
-  return (
-    <div>
-      <Row justify="space-between">
-        {login ? (
-          <Row align="middle">
-            <Avatar
-              size="small"
-              style={{ margin: "5px 5px 0px 5px" }}
-              icon={<UserOutlined />}
-            />
-            <span onClick={handleLogout}>{loginState.username}</span>
-          </Row>
-        ) : (
-          <Button type="link" href="/login">
-            登录
-          </Button>
-        )}
-
-        {/* 模式切换 */}
-        <Switch
-          checked={themeState}
-          style={{ margin: "5px 5px 0px 0px" }}
-          checkedChildren="白天"
-          unCheckedChildren="黑夜"
-          onChange={onChange}
-        />
-      </Row>
-      <BigTime />
-      <SearchView />
-      <Section>
-        <TodoCard />
-        <CollectionCard />
-        <StudyCard />
-      </Section>
-    </div>
-  );
+                {/* 模式切换 */}
+                <Switch
+                    checked={themeType}
+                    style={{ margin: "5px 5px 0px 0px" }}
+                    checkedChildren="白天"
+                    unCheckedChildren="黑夜"
+                    onChange={onChange}
+                />
+            </Row>
+            <BigTime />
+            <SearchView setSearchData={setSearchData} />
+            <Section>
+                <TodoCard />
+                <CollectionCard searchData={searchData} />
+                <StudyCard />
+            </Section>
+        </div>
+    );
 }
 
 

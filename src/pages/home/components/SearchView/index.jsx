@@ -1,65 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { SearchOutlined } from '@ant-design/icons'
-const SearchView = () => {
-    const favorData = JSON.parse(localStorage.getItem('flatFavor'))
-
-    function checkStrContain(i, j) {
-        if (!i || !j) {
-            return false;
-        }
-        if (i.charAt(0) != j.charAt(0)) {
-            return false;
-        }
-        i = i.substr(1, i.length - 1);
-        j = j.substr(1, j.length - 1);
-        var a;
-        var b;
-        if (i.length > j.length) {
-            a = i;
-            b = j;
-        } else {
-            a = j;
-            b = i;
-        }
-        var count = 0;
-        for (var bi = 0; bi < b.length; bi++) {
-            var bArr = b.split("");
-            if (a.indexOf(bArr[bi]) != -1) {
-                count++;
-            } else {
-                break;
-            }
-        }
-        if (b.length == count) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    function getArrayByName(name, array, length) {
-        if (array.length < 1) {
-            return;
-        }
-        var result = [];
-        for (var key in array) {
-            if (checkStrContain(array[key].name, name) && result.length < length) {
-                result.push(array[key])
-            }
-        }
-        return result
-    }
+import { message } from 'antd';
+// 自带网站
+import { recommendSite } from '../../../../assets/recommendData/recommendSite';
+import { useDebounce } from '../../../../utils/useDebounce';
+const SearchView = ({ setSearchData }) => {
+    const jsonData = JSON.parse(localStorage.getItem('flatFavor'))
+    const favorData = jsonData || recommendSite
+    // 初始化加载界面数据，原则：用户有就用用户的，没有就用推荐的
+    useEffect(() => {
+        setSearchData(favorData)
+    }, [])
+    const [isTip, setIsTip] = useState(false) // 判断提示框是否展示过
     const onChange = (e) => {
         let key = e.target.value;
-        // const findResult = favorData.find(item => item.name === key)
-        const findResult = getArrayByName(key, favorData, 10)
-        console.log(findResult);
+        // 通过正则过滤数据
+        if (favorData.length !== 0) {
+            let findResult = favorData.filter(function (item) {
+                //遍历数组，返回值为true保留并复制到新数组，false则过滤掉
+                let inputValue = new RegExp(`(.*)(${key.split('').join(')(.*)(')})(.*)`, 'i');
+                return item.name.match(inputValue);
+            });
+            setSearchData(findResult)
+        }
+        // 本地没有数据时提示用户
+        if (jsonData === null && !isTip) {
+            setIsTip(true)
+            message.info('你还没有导入收藏夹噢，现在为您搜索系统自带的网站')
+        }
     }
+    // 防抖
+    const debounceChange = useDebounce(onChange, 500)
     return (
         <Container >
             <div style={{ position: "relative" }}>
-                <Input type="search" onChange={onChange} autoFocus placeholder="你可以在这里查找你的收藏夹内容噢~" />
+                <Input type="search" onChange={debounceChange} autoFocus placeholder="你可以在这里查找你的收藏夹内容噢~" />
                 <SearchOutlined style={{ fontSize: "22px", position: "absolute", top: "18px", right: "30px" }} />
             </div>
         </Container>
@@ -72,7 +48,6 @@ const Container = styled.div`
     margin: 50px ;
 `
 const Input = styled.input`
-    
     width: 550px;
     height: 55px;
     font-size: 20px;
