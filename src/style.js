@@ -14,20 +14,7 @@ export const GlobalStyle = createGlobalStyle`
   --secondary-btn-bg: #ff0000;
   --secondary-btn-fg: #ffff00;
 }
-@media (prefers-color-scheme: dark) {
-    :root {
-        --primary-bg: #000; // 全局背景色，在下面配置
-        --font-fg: #fff;  // 字体颜色
-        --card-bg: #2e2e2e; // 组件渐变第一个颜色
-        --card-fg: #373737; // 组件渐变第二个颜色
-        --card-sd: #2b2b2b; // 卡片阴影第一个颜色
-        --card-sf: #3b3b3b; // 卡片阴影第二个颜色
-        --primary-btn-bg: #000; // 
-        --primary-btn-fg: #fff;
-        --secondary-btn-bg: #ff0000;
-        --secondary-btn-fg: #ffff00;
-    }
-}
+
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
