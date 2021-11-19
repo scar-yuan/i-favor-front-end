@@ -17,7 +17,9 @@ const ButtonStyle = styled.div`
                     -6px -6px 12px var(--card-sf);
     }
     
-
+    :hover {
+        transform: translateY(-10px);
+    }
     
     button:active {
         box-shadow: 4px 4px 12px var(--card-sd),

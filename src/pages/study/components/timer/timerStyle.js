@@ -19,7 +19,7 @@ const TimerStyle = styled.div`
 
   .timer em {
     display: inline-block;
-    line-height: 70px;
+    line-height: 60px;
     font-size: 40px;
     font-style: normal;
     vertical-align: top;

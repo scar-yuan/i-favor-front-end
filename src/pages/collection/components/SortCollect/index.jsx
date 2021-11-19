@@ -308,7 +308,7 @@ const SortCollect = (props) => {
     setData(filterData);
   };
   const handleSave = () => {
-    console.log(data);
+    console.log('请求');
     setIsLoadingUpload(true)
     instance.put('/favor', { bookmark: data }).then((res) => {
       // console.log(res.data.data);
