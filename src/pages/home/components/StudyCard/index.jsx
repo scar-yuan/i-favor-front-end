@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {Link} from 'react-router-dom'
 import { Card } from 'antd';
 import styled from "styled-components";
 import { Chart, Point, Area,	Annotation,	Axis,	Coordinate,	registerShape,	registerAnimation } from 'bizcharts';
@@ -146,7 +147,7 @@ const StudyCard = () => {
                 />
             </Chart>
             <ButtonBox>
-                <MyButton href="/study">开始学习</MyButton>
+                <Link to="/study"><MyButton >开始学习</MyButton></Link>
             </ButtonBox>
         </NewCard>
     );
