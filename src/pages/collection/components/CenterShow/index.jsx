@@ -3,14 +3,16 @@ import styled from 'styled-components';
 import { List, Carousel, Button } from 'antd';
 import { flatten } from '../../../../utils/flatten';
 import { IconButton, IconDiv, IconFont } from '../RightDrawer';
-import { recommendSite } from '../../../../assets/recommendData/recommendSite';
+import { recommendSite,documentSite } from '../../../../assets/recommendData/recommendSite';
 const CenterShow = ({ isTemp, favor }) => {
+    // 40 个一页
     const Count = 40
-    let renderData = favor
-    const localData = JSON.parse(localStorage.getItem('originalFavor'))
+    // JSON.parse(localStorage.getItem('originalFavor'))
+    const localData = isTemp ? documentSite : favor
     // 第一层是书签栏层，可以有很多个书签栏，书签栏下有收藏夹，收藏夹下有网站
-    const siteArray = localData.filter(item => item.type === 'site')
-    const folderArray = localData.filter(item => item.type === 'folder') // 获取到第一层中有多少个文件夹
+    
+    const siteArray = localData?.filter(item => item.type === 'site')
+    const folderArray = localData?.filter(item => item.type === 'folder') // 获取到第一层中有多少个文件夹
     // 遍历每个书签栏下的 文件夹，再分类，同时需要注意将遍历过的书签栏从数组中清除
     folderArray.forEach(item => {
         let len = folderArray.length - 1
@@ -34,7 +36,7 @@ const CenterShow = ({ isTemp, favor }) => {
             <div
                 style={{ height: "90vh" }}
             >
-                <Title >收藏的网站</Title>
+                <Title>未分类网站</Title>
                 <List
                     style={{ margin: "50px 0 0 0", height: "90vh" }}
                     grid={{
@@ -158,6 +160,7 @@ const Title = styled(Button)`
     /* font-size: 20px; */
     position: fixed;
     /* top: -10px; */
+    margin: 5px 10px;
     font-size: 20px;
     height: 40px;
     padding: 5px;

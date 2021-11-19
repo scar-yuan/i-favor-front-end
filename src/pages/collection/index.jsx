@@ -24,7 +24,7 @@ export default function Collection() {
     // 初始化从本地存储中取数据，没有就用预设数据
     useEffect(() => {
         const initFavor = async () => {
-            let localData = await localStorage.getItem('flatFavor')
+            let localData = await localStorage.getItem('originalFavor')
             let parseData = JSON.parse(localData)
             if (parseData == null) {
                 // 使用临时数据
@@ -34,7 +34,8 @@ export default function Collection() {
                 // 不使用临时数据
                 setIsTemp(false)
                 message.success('您已登录为您加载您的数据')
-                setFavor(JSON.parse(localData)?.filter(item => item.type === 'site'))
+                // JSON.parse(localData)?.filter(item => item.type === 'site')
+                setFavor(parseData)
             }
         }
         initFavor()
@@ -63,11 +64,11 @@ export default function Collection() {
                 setIsLoadingUpload(false)
                 const { data, code } = info.file.response
                 // 20003 更新了数据，20004 未更新 ，字符串
-                if (code === "20003" && !localStorage.getItem("flatFavor")) {
+                if (code === "20003" && !localStorage.getItem("originalFavor")) {
                     let temp = flatten(data) // 扁平化
                     let saveData = temp.filter(item => item.type === 'site') // 过滤出网站
                     setIsTemp(false) // 立即修改状态为，不使用临时数据
-                    setFavor(saveData) // 保存到当前的状态重
+                    setFavor(data) // 保存到当前的状态
                     // 持久化存储到本地
                     localStorage.setItem('originalFavor', JSON.stringify(data))
                     localStorage.setItem('flatFavor', JSON.stringify(saveData))
@@ -180,14 +181,15 @@ export default function Collection() {
                         <AppstoreOutlined />
                     </OpenButton>
                 </Popover>
-                {/* 推荐列表*/}
+                {/* 整理文件夹*/}
                 <Popover
                     placement="right"
-                    content={"整理文件夹"}
+                    content={!token ? "请先登录" : "整理文件夹"}
                 >
                     <OpenButton
                         onClick={showSortDrawer}
                         size="large"
+                        disabled={!token}
                     >
                         <DeploymentUnitOutlined />
                     </OpenButton>
@@ -201,7 +203,7 @@ export default function Collection() {
             {/* 右侧抽屉 */}
             <RightDrawer onCloseRight={onCloseRight} rightVisible={rightVisible} />
             {/* 整理文件夹组件写在这里，传入 onCloseSort,sortVisible,favor */}
-            <SortCollect setFavor={setFavor} onCloseSort={onCloseSort} sortVisible={sortVisible} favor={JSON.parse(localStorage.getItem('originalFavor'))} />
+            <SortCollect setFavor={setFavor} onCloseSort={onCloseSort} sortVisible={sortVisible} favor={favor} />
             {/* 中间布局块，待分离 */}
             <CenterShow isTemp={isTemp} favor={favor} />
         </CollectionContainer >

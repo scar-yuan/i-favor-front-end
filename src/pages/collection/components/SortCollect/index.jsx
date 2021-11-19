@@ -27,7 +27,7 @@ const SortCollect = (props) => {
   useEffect(() => {
     console.log(props.favor);
     setData(props.favor);
-  }, []);
+  }, [props.favor]);
 
   // 模态框
   const showNewFolderVisible = () => {
@@ -309,7 +309,9 @@ const SortCollect = (props) => {
     console.log(data);
     setIsLoadingUpload(true)
     instance.put('/favor', { bookmark: data }).then((res) => {
-      console.log(res);
+      // console.log(res.data.data);
+      props.setFavor(res.data.data)
+      localStorage.setItem('originalFavor',JSON.stringify(res.data.data))
       if (res.data.code === '20003') {
         message.success('更新数据库成功')
       }
@@ -363,7 +365,7 @@ const SortCollect = (props) => {
         size="large"
         key="left"
         drawerStyle={{ backgroundColor: "rgb(233,233,233)" }}
-        bodyStyle={{overflowX:"hidden"}}
+        bodyStyle={{ overflowX: "hidden" }}
       >
         <TitleWrap>
           <div
