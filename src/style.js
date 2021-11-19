@@ -45,11 +45,16 @@ body::-webkit-scrollbar{
   --card-sf: ${(props) =>
     props.dark ? "#313131" : "#ffffff"}; // 卡片阴影第二个颜色
   --hover-fg: ${(props) => (props.dark ? "#fff" : "#000")};
+  --todoli-bg:${(props) => (props.dark ? "#484747" : "#fff")};
+  --todoli-sd:${(props) => (props.dark ? "#6a6666" : "#adadad")};
+  --todocard-sd:${(props) => (props.dark ? "" : "#ffffff")};
+  --todo-back-botton-bg:${(props) => (props.dark ? "#484747" : "#e6e6e6")};
   --primary-btn-bg: #000; // 
   --primary-btn-fg: #fff;
   --secondary-btn-bg: #ff0000;
   --secondary-btn-fg: #ffff00;
 }
+
 @media (prefers-color-scheme: dark) {
     :root {
         --primary-bg: #2b2b2b; // 全局背景色，在下面配置
@@ -64,6 +69,7 @@ body::-webkit-scrollbar{
         --secondary-btn-fg: #ffff00;
     }
 }
+
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,

@@ -1,13 +1,40 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+/* :root {
+  --primary-bg: rgb(233,233,233); 
+  --font-fg: #000;  
+  --card-bg: #e6e6e6; 
+  --card-fg: #ffffff; 
+  --card-sd: #c4c4c4; 
+  --card-sf: #ffffff;
+  --primary-btn-bg: #000; 
+  --primary-btn-fg: #fff;
+  --secondary-btn-bg: #ff0000;
+  --secondary-btn-fg: #ffff00;
+} */
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+/*
+// :root {
+//   --primary-bg: rgb(233,233,233); // 全局背景色，在下面配置
+//   --font-fg: #000;  // 字体颜色
+//   --card-bg: #e6e6e6; // 组件渐变第一个颜色
+//   --card-fg: #ffffff; // 组件渐变第二个颜色
+//   --card-sd: #c4c4c4; // 卡片阴影第一个颜色
+//   --card-sf: #ffffff; // 卡片阴影第二个颜色
+//   --primary-btn-bg: #000; // 
+//   --primary-btn-fg: #fff;
+//   --secondary-btn-bg: #ff0000;
+//   --secondary-btn-fg: #ffff00;
+// }
+*/
