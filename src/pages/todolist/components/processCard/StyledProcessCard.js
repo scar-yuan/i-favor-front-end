@@ -8,7 +8,7 @@ const ProcessCard = styled.div`
   border-radius: 15px;
   color: var(font-fg);
   background: var(--todoli-bg);
-  box-shadow: 15px 15px 33px var(----todoli-sd), -15px -15px 33px #ffffff;
+  box-shadow: 15px 15px 33px var(--card-sd), -15px -15px 33px var(--card-sf);
   .processDesc {
     font-size: 0.5rem;
     flex-grow: 1;

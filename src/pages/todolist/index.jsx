@@ -142,7 +142,7 @@ function TodoList() {
                 <TodoContainer done={false} update={update} userTodo={userTodo} setFinshData={setFinshData}></TodoContainer>
             </div>
             <div className="centerTodoBox">
-                <div style={{display:"flex", justifyContent:"space-around",marginBottom:"20vh"}}>
+                <div style={{display:"flex", justifyContent:"space-around",marginBottom:"13vh"}}>
                     <RecentTodoCard type="doing" finshData={finshData}></RecentTodoCard>
                     <RecentTodoCard type="done" finshData={finshData}></RecentTodoCard>   
                 </div>

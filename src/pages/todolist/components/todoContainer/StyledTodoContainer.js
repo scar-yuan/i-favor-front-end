@@ -20,10 +20,12 @@ const DivInLi = styled.div`
   margin: 0 auto;
   margin-top: 2.5vh;
   font-size: 18px;
-  border: 1px solid rgba(0, 0, 0, 0);
+
+  border: none;
   border-radius: 12.5px;
-  background: var(--todoli-bg);
-  box-shadow: 5px 5px 10px var(--tosoli-sd), 5px 5px 10px #ffffff;
+  user-select: none;
+  background: linear-gradient(145deg, var(--card-bg), var(--card-fg));
+  box-shadow: 5px 5px 10px var(--card-sd), -5px -5px 10px var(--card-sf);
 `;
 const TodoHeader = styled.div`
   width: 24vw;
@@ -33,8 +35,10 @@ const TodoHeader = styled.div`
   font-size: 18px;
   border: 1px solid rgba(0, 0, 0, 0);
   border-radius: 12.5px;
-  background: #676565;
-  box-shadow: 5px 5px 10px #595757, 5px 5px 10px #757373;
+  color: var(--font-fg);
+  background: var(--todoheader-bg);
+  box-shadow: 5px 5px 10px var(--todoheader-sd),
+    -5px -5px 10px var(--todoheader-sf);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -44,7 +48,8 @@ const TodoHeader = styled.div`
   .TodoNums {
     width: 3vh;
     height: 3vh;
-    background: #fff;
+    background: var(--todo-header-font-fg);
+    color: var(--font-fg);
     margin-right: 1vw;
     border-radius: 15px;
     text-align: center;

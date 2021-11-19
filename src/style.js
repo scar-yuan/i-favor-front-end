@@ -49,6 +49,10 @@ body::-webkit-scrollbar{
   --todoli-sd:${(props) => (props.dark ? "#6a6666" : "#adadad")};
   --todocard-sd:${(props) => (props.dark ? "" : "#ffffff")};
   --todo-back-botton-bg:${(props) => (props.dark ? "#484747" : "#e6e6e6")};
+  --todoheader-bg:${(props) => (props.dark ? "#2d3134" : "#d7dfe4")};
+  --todoheader-sd:${(props) => (props.dark ? "#202224" : "#979ca0")};
+  --todoheader-sf:${(props) => (props.dark ? "#3b4044" : "#ffffff")};
+  --todo-header-font-fg: ${(props) => (!props.dark ? "#fff" : "#2d3134")};
   --primary-btn-bg: #000; // 
   --primary-btn-fg: #fff;
   --secondary-btn-bg: #ff0000;

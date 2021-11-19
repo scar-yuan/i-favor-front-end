@@ -22,7 +22,7 @@ function TodoContainer(props) {
            newState1.items =  userTodo.filter(item => {return item.done === done}).map(item => {
              const timeFormat  = dayjs(new Date().toLocaleDateString()).valueOf() > item.createTime?"MM-DD":"HH:mm"
              const createTime = dayjs(item.createTime).format(timeFormat)
-              return <li key={item.id} ><DivInLi ><Radio readOnly={true} type="radio" checked={done} onClick={() => update(item.id)} /><p style={{width:"17vw",textAlign:"center",lineHeight:"8vh",overflow:"hidden"}}>{item.todo}</p><p style={{color:"gray",opacity:"0.8"}}>{createTime}</p></DivInLi></li>
+              return <li key={item.id} ><DivInLi ><Radio readOnly={true} type="radio" checked={done} onClick={() => update(item.id)} /><p style={{width:"17vw",textAlign:"center",lineHeight:"8vh",overflow:"hidden"}}>{item.todo}</p><p style={{color:"gray",opacity:"0.8",marginRight:"1.2vw"}}>{createTime}</p></DivInLi></li>
            } )
            console.log('newState1.items',newState1.items)
            setFinshData((finshData) => {

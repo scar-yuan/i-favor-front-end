@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const RecentTodoCard = styled.div`
-  width: 8vw;
+  width: 9vw;
   height: 25vh;
   display: flex;
   padding: 2px 2px;
