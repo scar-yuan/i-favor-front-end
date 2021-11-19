@@ -1,22 +1,15 @@
-
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Upload, message, Button, List, Popover, Spin } from 'antd';
 import { UploadOutlined, AppstoreOutlined, QuestionCircleOutlined, DeploymentUnitOutlined, AlignLeftOutlined, HomeOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
-import { recommendSite } from '../../assets/recommendData/recommendSite';
+
 import { flatten } from '../../utils/flatten';
 import MyFavorList from './components/MyFavorList';
 import SortCollect from './components/SortCollect'
-// 不用这个
 import RightDrawer from './components/RightDrawer';
 import StepDrawer from './components/StepDrawer';
-import { IconButton, IconDiv, IconFont } from './components/RightDrawer';
-// 尝试拖拽
-// import { useDrag } from 'react-dnd'
-// 定义拖拽类型
-// import { ItemTypes } from './Constants';
-
+import CenterShow from './components/CenterShow';
 
 export default function Collection() {
     const [favor, setFavor] = useState([])
@@ -29,20 +22,10 @@ export default function Collection() {
     const [stepVisible, setStepVisible] = useState(false) //控制顶部 step 打开状态
     const [sortVisible, setSortVisible] = useState(false) // 控制整理文件夹打开状态
 
-    // 拖拽API
-    // const [{ opacity }, dragRef] = useDrag(
-    //     () => ({
-    //         type: ItemTypes.SITE,
-    //         collect: (monitor) => ({
-    //             opacity: monitor.isDragging() ? 0.1 : 1
-    //         })
-    //     }),
-    //     []
-    // )
-    // 初始化从本地存储中取数据
+    // 初始化从本地存储中取数据，没有就用预设数据
     useEffect(() => {
         const initFavor = async () => {
-            let localData = await localStorage.getItem('flatFavor')
+            let localData = await localStorage.getItem('originalFavor')
             let parseData = JSON.parse(localData)
             if (parseData == null) {
                 // 使用临时数据
@@ -52,13 +35,13 @@ export default function Collection() {
                 // 不使用临时数据
                 setIsTemp(false)
                 message.success('您已登录为您加载您的数据')
-                setFavor(JSON.parse(localData)?.filter(item => item.type === 'site'))
+                // JSON.parse(localData)?.filter(item => item.type === 'site')
+                setFavor(parseData)
             }
         }
         initFavor()
     }, [])
     // 测试的时候采用接口工具获取到的 token
-    // const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTkyNmU4ZWM1NmU4NmFkZWM5Y2E4YTkiLCJpYXQiOjE2MzcwODE5NzEsImV4cCI6MTYzNzA4NTU3MX0.9Ua_1TIlA337_BxqDx-CUADizR1gZ7VAwQfMm9uA43Q`
     const token = JSON.parse(localStorage.getItem("token"))?.token
     // isTemp 为 true 展示临时数据，表示用户为上传数据
     // Upload 组件的 props
@@ -72,14 +55,6 @@ export default function Collection() {
         disabled: !token,
         showUploadList: false,
         maxCount: 1,
-        progress: {
-            strokeColor: {
-                '0%': '#108ee9',
-                '100%': '#87d068',
-            },
-            strokeWidth: 3,
-            format: percent => `${parseFloat(percent.toFixed(2))}%`,
-        },
         // 上传文件格式判断
         onChange(info) {
             if (info.file.status === 'uploading') {
@@ -90,11 +65,11 @@ export default function Collection() {
                 setIsLoadingUpload(false)
                 const { data, code } = info.file.response
                 // 20003 更新了数据，20004 未更新 ，字符串
-                if (code === "20003" && !localStorage.getItem("flatFavor")) {
+                if (code === "20003" && !localStorage.getItem("originalFavor")) {
                     let temp = flatten(data) // 扁平化
                     let saveData = temp.filter(item => item.type === 'site') // 过滤出网站
                     setIsTemp(false) // 立即修改状态为，不使用临时数据
-                    setFavor(saveData) // 保存到当前的状态重
+                    setFavor(data) // 保存到当前的状态
                     // 持久化存储到本地
                     localStorage.setItem('originalFavor', JSON.stringify(data))
                     localStorage.setItem('flatFavor', JSON.stringify(saveData))
@@ -107,7 +82,7 @@ export default function Collection() {
     }
     // 未登录提示
     const handleTips = () => {
-        if(!token) {
+        if (!token) {
             message.warn("你还没有登录噢，请先登录再进行操作")
         }
     }
@@ -206,14 +181,15 @@ export default function Collection() {
                         <AppstoreOutlined />
                     </OpenButton>
                 </Popover>
-                {/* 推荐列表*/}
+                {/* 整理文件夹*/}
                 <Popover
                     placement="right"
-                    content={"整理文件夹"}
+                    content={!token ? "请先登录" : "整理文件夹"}
                 >
                     <OpenButton
                         onClick={showSortDrawer}
                         size="large"
+                        disabled={!token}
                     >
                         <DeploymentUnitOutlined />
                     </OpenButton>
@@ -227,46 +203,9 @@ export default function Collection() {
             {/* 右侧抽屉 */}
             <RightDrawer onCloseRight={onCloseRight} rightVisible={rightVisible} />
             {/* 整理文件夹组件写在这里，传入 onCloseSort,sortVisible,favor */}
-            <SortCollect onCloseSort={onCloseSort} sortVisible={sortVisible}/>
+            <SortCollect setFavor={setFavor} onCloseSort={onCloseSort} sortVisible={sortVisible} favor={favor} />
             {/* 中间布局块，待分离 */}
-            <CenterContainer>
-                <List
-                    grid={{
-                        gutter: 16,
-                        xs: 2,
-                        sm: 3,
-                        md: 4,
-                        lg: 6,
-                        xl: 8,
-                        xxl: 3,
-                    }}
-                    dataSource={isTemp ? recommendSite : favor}
-                    renderItem={item => (
-                        // 拖拽
-                        <List.Item /* ref={dragRef}  style={{ opacity }}*/>
-                            <IconButton type="link" href={item.href} target="_blank">
-                                <IconDiv
-                                    style={{ width: "80px", height: "80px" }}
-                                >
-                                    {/* <img style={{ width: "48px", height: "48px" }} src={item.href + 'favicon.ico'} alt={item.name} /> */}
-                                    <IconFont
-                                        style={{ fontSize: "36px", fontWeight: "bold" }}
-                                    >
-                                        <span>{item.name.trim().substr(0, 1)}</span>
-                                    </IconFont>
-                                    <img
-                                        style={{ width: "70px", height: "70px", borderRadius: "10px", overflow: 'hidden', position: "absolute", backgroundColor: "#fff" }}
-                                        src={item.icon}
-                                        alt={item.name}
-                                        onError={(e) => { e.target.onerror = null; e.target.style = "display: none" }}
-                                    />
-                                </IconDiv>
-                                <p style={{ fontSize: "12px", width: "80px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.name}</p>
-                            </IconButton>
-                        </List.Item>
-                    )}
-                />
-            </CenterContainer>
+            <CenterShow isTemp={isTemp} favor={favor} />
         </CollectionContainer >
     )
 }
@@ -294,7 +233,7 @@ const CollectionContainer = styled.div`
     }
 }
 `
-const SpinPosition = styled(Spin)`
+export const SpinPosition = styled(Spin)`
     position: absolute;
     width: 100%;
     height: 100%;
@@ -356,9 +295,9 @@ export const ListItem = styled(List.Item)`
 `
 // 上传按钮
 const UploadButton = styled(Button)`
-width: 46px;
-height: 40px;
-margin: 10px;
+    width: 46px;
+    height: 40px;
+    margin: 10px;
     color: var(--font-fg);
     border: none;
     border-radius: 10px; 
@@ -379,6 +318,7 @@ const ButtonBox = styled.div`
     left: 5px;
     top: 50%;
     transform: translateY(-50%);
+    z-index: 10;
 `
 // 打开侧边栏button
 const OpenButton = styled(Button)`
@@ -396,9 +336,4 @@ const OpenButton = styled(Button)`
         color: #2b2b2b;
         background-color: #fff;
     } 
-`
-// 首页主拖拽区
-const CenterContainer = styled.main`
-    padding: 50px 100px 50px 100px;
-    
 `

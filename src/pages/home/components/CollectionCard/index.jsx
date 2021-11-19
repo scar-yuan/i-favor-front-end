@@ -3,40 +3,58 @@ import { Card, List, Button, Carousel } from 'antd';
 import styled from "styled-components";
 import MyButton from '../Button/index'
 const CollectionCard = ({ searchData }) => {
+  console.log(searchData);
+  let data = searchData || []
+  const Count = 10
+  // 对齐数据
+  // while (searchData?.length !== undefined && data.length % Count !== 0) {
+  //   data.push({});
+  // }
+  // 切割数据源
+  const sliceItems = [];
+  if (searchData?.length !== undefined) {
+    for (let i = 0; i < data.length; i += Count) {
+      let endIndex = i + Count < data.length ? i + Count : data.length;
+      sliceItems.push(data.slice(i, endIndex));
+    }
+  }
+  const items = [];
+  for (let i = 0; i < sliceItems.length; i++) {
+    items.push(<div><List
+      // itemLayout="horizontal"
+      dataSource={sliceItems[i]}
+      renderItem={item => (
+        <Button type="link" href={item.href} target="_blank">
+          <IconDiv>
+            {/* <img style={{ width: "48px", height: "48px" }} src={item.href + 'favicon.ico'} alt={item.name} /> */}
+            <IconFont>
+              <span>{item.name.trim().substr(0, 1)}</span>
+            </IconFont>
+            <img
+              style={{ width: "48px", height: "48px", position: "absolute", backgroundColor: "var(--primary-bg)" }}
+              src={item.href + '/favicon.ico'}
+              alt={item.name}
+              onError={(e) => { e.target.onerror = null; e.target.style = "display: none" }}
+            />
+          </IconDiv>
+          <p style={{ fontSize: "12px", color: "var(--font-fg)", width: "56px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.name}</p>
+        </Button>
+      )}
+    /></div>)
+  }
   return (
     <NewCard>
-      {
-        searchData?.length !== undefined && <SearchList
-          grid={{
-            gutter: 16,
-            column: 6
-          }}
-          pagination={{
-            pageSize: 12,
-            showSizeChanger: false,
-            hideOnSinglePage: true,
-            total: searchData.length > 96 ? 96 : searchData.length
-          }}
-          dataSource={searchData}
-          renderItem={item => (
-            <Button type="link" href={item.href} target="_blank">
-              <IconDiv>
-                {/* <img style={{ width: "48px", height: "48px" }} src={item.href + 'favicon.ico'} alt={item.name} /> */}
-                <IconFont>
-                  <span>{item.name.trim().substr(0, 1)}</span>
-                </IconFont>
-                <img
-                  style={{ width: "48px", height: "48px", position: "absolute", backgroundColor: "var(--primary-bg)" }}
-                  src={item.href + '/favicon.ico'}
-                  alt={item.name}
-                  onError={(e) => { e.target.onerror = null; e.target.style = "display: none" }}
-                />
-              </IconDiv>
-              <p style={{ fontSize: "12px", color: "var(--font-fg)", width: "56px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.name}</p>
-            </Button>
-          )}
-        />
-      }
+      <Carousel
+        draggable={true}
+        adaptiveHeight={true}
+        style={{ margin: "20px 0px", padding: "10px 0" }}
+        autoplay
+        infinite
+        dotPosition={"bottom"}
+        dots={false}
+      >
+        {items}
+      </Carousel>
       <ButtonBox>
         <MyButton href="/collection">收藏夹管理</MyButton>
       </ButtonBox>
@@ -68,10 +86,10 @@ const NewCard = styled(Card)`
     transform: translateY(-10px);
   }
 `
-const SearchList = styled(List)`
-  height: 250px;
-  overflow:hidden;
-`
+// const SearchList = styled(List)`
+//   height: 250px;
+//   overflow:hidden;
+// `
 // 无ico时渲染的 字体样式
 const IconFont = styled.div`
     display: flex;

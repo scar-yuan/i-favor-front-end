@@ -13,6 +13,7 @@ const RightDrawer = ({ rightVisible, onCloseRight }) => {
             placement="right"
             onClose={onCloseRight}
             visible={rightVisible}
+            closable={false}
             drawerStyle={{
                 backgroundColor: " var(--card-bg)",
                 // boxShadow: " 5px 5px 10px var(--card-sd),- 5px - 5px 10px var(--card-sf)",
