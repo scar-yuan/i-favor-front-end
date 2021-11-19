@@ -9,9 +9,9 @@ const ButtonStyle = styled.div`
         border: none;
         padding: 0.7em 1.7em;
         font-size: 18px;
-        border-radius: 0.5em;
-        background: linear-gradient(145deg, var(--card-bg), var(--card-fg));
-        border: 1px solid #e8e8e8;
+        border-radius: 10px;
+        background: linear-gradient(to bottom, var(--card-bg), var(--card-fg));
+        border: 1px solid var(--card-bg);
         transition: all .3s;
         box-shadow: 6px 6px 12px var(--card-sd),
                     -6px -6px 12px var(--card-sf);
