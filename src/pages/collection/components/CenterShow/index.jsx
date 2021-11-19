@@ -1,15 +1,16 @@
-import React from "react";
+import Reactm,{useRef} from "react";
 import styled from "styled-components";
 import { List, Carousel, Button } from "antd";
 import { flatten } from "../../../../utils/flatten";
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { LeftCircleTwoTone, RightCircleTwoTone } from "@ant-design/icons";
 import { IconButton, IconDiv, IconFont } from "../RightDrawer";
-import "./index.css";
 import {
   recommendSite,
   documentSite,
 } from "../../../../assets/recommendData/recommendSite";
 const CenterShow = ({ isTemp, favor }) => {
+
+  const calRef = useRef(null);
   // 40 个一页
   const Count = 40;
   // JSON.parse(localStorage.getItem('originalFavor'))
@@ -172,10 +173,18 @@ const CenterShow = ({ isTemp, favor }) => {
       </div>
     );
   }
-
+  const handleGotoNext = ()=>{
+    calRef.current.next()
+  }
+  const handleGotoPrev = ()=>{
+    calRef.current.prev()
+  }
   return (
-    <div>
+    <div style={{position:"relative"}}>
+      <Larrow onClick={()=>{handleGotoPrev()}}><LeftCircleTwoTone twoToneColor="var(--card-bg)"  style={{fontSize:"50px"}}/></Larrow>
+      <Rarrow onClick={()=>{handleGotoNext()}}><RightCircleTwoTone twoToneColor="var(--card-bg)" style={{fontSize:"50px"}}/></Rarrow>
       <CenterContainer
+        ref={calRef}
         dotsClass={"slick-dots"}
         draggable={true}
         adaptiveHeight={true}
@@ -208,7 +217,7 @@ const Title = styled(Button)`
 const CenterContainer = styled(Carousel)`
   padding: 0px 100px;
   /* margin: 50px 0px; */
-  width: 100vw;
+  width: 95vw;
   height: 100vh;
   .slick-dots {
       height: 6px;
@@ -224,5 +233,33 @@ const CenterContainer = styled(Carousel)`
       
   }
 `;
+const Larrow = styled.div`
+  position: absolute;
+  top:50%;
+  left:55px;
+  transform: translate(-50%,-50%);
+  padding: 5px;
+  cursor: pointer;
+  user-select: none;
+  z-index: 99;
+  opacity: .5;
+  &:hover{
+    background-color: rgba(255,255,255,.3);
+  }
+`;
+const Rarrow = styled.div`
+  position: absolute;
+  top:50%;
+  right:40px;
+  transform: translate(-50%,-50%);
+  cursor: pointer;
+  padding: 5px;
+  user-select: none;
+  z-index: 99;
+  opacity: .5;
+  &:hover{
+    background-color: rgba(255,255,255,.3);
+  }
+`
 
 export default CenterShow;
