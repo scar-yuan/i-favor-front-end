@@ -12,23 +12,26 @@ import {
   DraggableItemWrap,
   TitleWrap,
 } from "./IndexPage.js";
+import styled from "styled-components";
 // import test from "../../../../assets/testData/favor.json";
 
 const SortCollect = (props) => {
   const [isNewFolderVisible, setIsNewFolderVisible] = useState(false);
   const [isShowDelete, setIsShowDelete] = useState(false);
   const [isNewSiteVisible, setIsNewSiteVisible] = useState(false);
-  const [data, setData] = useState([]);
+  // 子传父
+  
+  const [data, setData] = useState([1]);
   const [temp, setTemp] = useState({});
   const folderForm = useRef(null);
   const siteForm = useRef(null);
   useEffect(() => {
-    console.log(props.favor);
-    setData(props.favor);
+    setData(JSON.parse(localStorage.getItem('originalFavor')));
+    
   }, []);
-
   // 模态框
   const showNewFolderVisible = () => {
+    console.log(data);
     setIsNewFolderVisible(true);
   };
   const showNewSiteVisible = () => {
@@ -307,6 +310,7 @@ const SortCollect = (props) => {
     console.log(data);
     instance.put('/favor',{bookmark:data}).then((res)=>{
       console.log(res);
+      setData(res.data.data);
     },(err)=>{
       console.log(err);
     })
@@ -319,39 +323,18 @@ const SortCollect = (props) => {
   const handleNewSite = () => {
     showNewSiteVisible();
   };
- /*  useEffect(() => {
-    function flatten(array, result) {
-      result = result || [];
-      array.forEach((element) => {
-        if (element.children.length !== 0) {
-          result.push(element);
-          flatten(element.children, result);
-        } else {
-          result.push(element);
-        }
-      });
-      return result;
-    }
-    // console.log(test.data);
-    // console.log(list);
-    const res = flatten(test.data);
-    // console.log(res);
-    // setFlatData(res);
-    // console.log('data',data);
-    // console.log('temp',temp);
-  }, []); */
   return (
     <>
       <Drawer
-        title="收藏夹管理"
         placement="left"
+        closable={false}
         onClose={() => {
           props.onCloseSort();
         }}
         visible={props.sortVisible}
         size="large"
         key="left"
-        drawerStyle={{ backgroundColor: "rgb(233,233,233)" }}
+        drawerStyle={{ backgroundColor: " var(--primary-bg)" }}
       >
         <TitleWrap>
           <div
@@ -386,6 +369,7 @@ const SortCollect = (props) => {
           >
             保存
           </div>
+          {/* <div>如果数据未更新，请点击刷新</div> */}
         </TitleWrap>
         {/* 新建文件夹模态框 */}
         <Modal

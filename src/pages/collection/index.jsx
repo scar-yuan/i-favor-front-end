@@ -23,10 +23,12 @@ export default function Collection() {
     const [isTemp, setIsTemp] = useState(false) // 是否使用临时数据
     const [isLoadingUpload, setIsLoadingUpload] = useState(false) // 是否展示全局loading
     // const [isDataTips, setIsDataTips] = useState(false) // 设置使用数据提示
+
     const [rightVisible, setRightVisible] = useState(false); // 右边drawer打开状态
     const [leftVisible, setLeftVisible] = useState(false)   // 左侧 drawer 打开状态
     const [stepVisible, setStepVisible] = useState(false) //控制顶部 step 打开状态
     const [sortVisible, setSortVisible] = useState(false) // 控制整理文件夹打开状态
+
     // 拖拽API
     // const [{ opacity }, dragRef] = useDrag(
     //     () => ({
@@ -135,7 +137,6 @@ export default function Collection() {
     const onCloseSort = () => {
         setSortVisible(false)
     }
-
     return (
         <CollectionContainer isLoadingUpload={isLoadingUpload}>
             <SpinPosition size="large" spinning={isLoadingUpload} />
@@ -226,7 +227,7 @@ export default function Collection() {
             {/* 右侧抽屉 */}
             <RightDrawer onCloseRight={onCloseRight} rightVisible={rightVisible} />
             {/* 整理文件夹组件写在这里，传入 onCloseSort,sortVisible,favor */}
-            <SortCollect onCloseSort={onCloseSort} sortVisible={sortVisible} favor={JSON.parse(localStorage.getItem('originalFavor'))}/>
+            <SortCollect onCloseSort={onCloseSort} sortVisible={sortVisible}/>
             {/* 中间布局块，待分离 */}
             <CenterContainer>
                 <List
