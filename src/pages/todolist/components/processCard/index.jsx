@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from 'react'
+import React from 'react'
 import { Decoration9 } from '@jiaminghi/data-view-react'//DataV的动态环图
 
 import {ProcessCard} from './StyledProcessCard.js'
@@ -6,7 +6,6 @@ import {ProcessCard} from './StyledProcessCard.js'
 export default function index(props) {
 
     const {finshData} = props
-    console.log('card',finshData.total,finshData.done)
     const percentage = Math.floor((finshData.done/finshData.total)*100)
     return (
         <ProcessCard>

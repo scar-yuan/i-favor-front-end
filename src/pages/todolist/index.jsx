@@ -25,7 +25,6 @@ function TodoList() {
         firstTodo:''
     })
     useEffect(() => {
-        console.log('effect执行了')
         instance.get("/todo",{
             headers: {
                             Authorization: `Bearer ` + token
@@ -40,11 +39,8 @@ function TodoList() {
             setFinshData((finshData) => {
                 let doneNums = 0
                 let newState = cloneDeep(finshData)
-                console.log('333333333',newState)
-                console.log('22222222222222222222',userTodo)
                 for(let i = 0;i<data.length;i++){
                     if(data[i].done === true){
-                    console.log('11111111111111111111')
                     doneNums +=1
                 }
                 }
@@ -54,19 +50,8 @@ function TodoList() {
                 return newState
             })
         })
-        // setTimeout(()=>{//axios请求
-        //     let data = [{id:7,todo:'吃饭',createTime:1637226288000,done:false},
-        //     {id:2,todo:"睡觉",createTime:1637226289999,done:true},
-        //     {id:1,todo:"打豆豆",createTime:1637326288000,done:false},
-        //     {id:4,todo:"打代码",createTime:1637226289999,done:false},
-        //     {id:3,todo:" play basketball",createTime:1637326278000,done:false},
-        //     {id:6,todo:"王者出击",createTime:1637226239999,done:true},
-        //     ]
-        // }, 0);
-
-
     },[])
-    //setUserTodo('111')
+
  
     const add = (value) => {
         setUserTodo(userTodo => [...userTodo,{id:nanoid(),createTime:dayjs().valueOf(),todo:value,done:false}])
@@ -77,24 +62,15 @@ function TodoList() {
             return newState
         })
         console.log('add执行了',finshData)
-        // axios.post('xxxx',{
-        //         TodoValue,
-        //         todoId
-        // })
+
         return {code:"20003"}
     }
     const update = (id) => {
-        // axios.put('xxx',{
-
-        // })
-
         setUserTodo(userTodo => {
-            console.log('查看初始转台',userTodo)
+
             let newState1 = cloneDeep(userTodo)
             for(let i = 0;i<userTodo.length;i++){
-                console.log(userTodo[i].id)
                 if(userTodo[i].id === id){
-                    console.log('开始转换')
                     if(newState1[i].done){
                         setFinshData((finshData) => {return {...finshData,done:finshData.done-1}})
                     } else {
@@ -103,14 +79,12 @@ function TodoList() {
                     newState1[i].done = !userTodo[i].done
                     
                 }
-                console.log('update',newState1)
             }
             return newState1
         })
         return {code:"20003"}
     }
     const putData = () => {
-        console.log('7777777777777777777777777777777777777')
         instance.put("/todo",{todo:userTodo},{
             headers: {
                             Authorization: `Bearer ` + token

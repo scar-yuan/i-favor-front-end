@@ -7,10 +7,10 @@ const TodoCard = () => {
         <NewCard>
             <TodoDiv>
               <div className="header">Todo</div>
-              <div className="todo"><MinRadio checked type="radio"/><div className="todoContent">写下待办</div><div className="timeDesc">04:30</div></div>
-              <div className="todo"><MinRadio checked type="radio"/><div className="todoContent">逐个完成</div><div className="timeDesc">05:30</div></div>
-              <div className="todo"><MinRadio checked type="radio"/><div className="todoContent">调整状态</div><div className="timeDesc">06:30</div></div>
-              <div className="todo"><MinRadio checked type="radio"/><div className="todoContent">潇洒离去</div><div className="timeDesc">07:30</div></div>
+              <div className="todo"><MinRadio readOnly checked type="radio"/><div className="todoContent">写下待办</div><div className="timeDesc">04:30</div></div>
+              <div className="todo"><MinRadio readOnly checked type="radio"/><div className="todoContent">逐个完成</div><div className="timeDesc">05:30</div></div>
+              <div className="todo"><MinRadio readOnly checked type="radio"/><div className="todoContent">调整状态</div><div className="timeDesc">06:30</div></div>
+              <div className="todo"><MinRadio readOnly checked type="radio"/><div className="todoContent">潇洒离去</div><div className="timeDesc">07:30</div></div>
             </TodoDiv>
             <ButtonBox>
             <MyButton href="/todolist" >待办清单</MyButton>

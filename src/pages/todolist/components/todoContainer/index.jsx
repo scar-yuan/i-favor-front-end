@@ -16,7 +16,6 @@ function TodoContainer(props) {
       
       useEffect(() => {
         const {userTodo,done,update,setFinshData} = props
-        console.log('看一下',userTodo)
         setState(state => {
           let newState1 = cloneDeep(state)
            newState1.items =  userTodo.filter(item => {return item.done === done}).map(item => {
@@ -24,9 +23,7 @@ function TodoContainer(props) {
              const createTime = dayjs(item.createTime).format(timeFormat)
               return <li key={item.id} ><DivInLi ><Radio readOnly={true} type="radio" checked={done} onClick={() => update(item.id)} /><p style={{width:"17vw",textAlign:"center",lineHeight:"8vh",overflow:"hidden"}}>{item.todo}</p><p style={{color:"gray",opacity:"0.8",marginRight:"1.2vw"}}>{createTime}</p></DivInLi></li>
            } )
-           console.log('newState1.items',newState1.items)
            setFinshData((finshData) => {
-            // console.log('44444444',{...finshData,[temp]:newState1[0]})
              let temp 
              done?temp = 'justDone':temp = 'firstTodo'
              const tempp  = userTodo.filter(item => {return item.done === done})[0]
@@ -41,7 +38,6 @@ function TodoContainer(props) {
         
       },[props.userTodo])
       const {done} = props
-      console.log('凌晨时间戳来啊了',dayjs(new Date().toLocaleDateString()).valueOf())
     return (
         <TodoContainerBox>
         <div className="todoBox">
