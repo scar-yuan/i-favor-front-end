@@ -143,6 +143,7 @@ function Login() {
                 title="点击返回首页"
                 width="80px"
                 height="80px"
+                className="logo-img"
               />
             </div>
             <div className="form-title">Sign in to iFavor</div>

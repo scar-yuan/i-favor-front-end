@@ -48,8 +48,6 @@ const LoginWrap = styled.div`
       align-items: center;
       box-shadow: 20px 20px 60px #bebebe;
       .logo {
-        background: linear-gradient(145deg, #ececec, #f0f0f0);
-        box-shadow: 10px 10px 30px #bebebe, -10px -10px 30px #fff;
         margin-bottom: 20px;
         cursor: pointer;
       }

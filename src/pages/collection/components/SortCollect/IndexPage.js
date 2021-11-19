@@ -43,7 +43,9 @@ const ContentWrap = styled.div`
     align-items: center;
     color: var(--font-fg);
     .site-ico {
-      margin-right: 20px;
+      width: 32px;
+      height: 32px;
+      margin-right: 10px;
     }
     p {
       overflow: hidden;

@@ -13,6 +13,7 @@ import {
   DraggableItemWrap,
   TitleWrap,
 } from "./IndexPage.js";
+import unamed from '../../../../assets/logo/unnamed.png'
 import styled from "styled-components";
 // import test from "../../../../assets/testData/favor.json";
 
@@ -263,7 +264,7 @@ const SortCollect = (props) => {
                       {item.type === "site" ? (
                         <img
                           className="site-ico"
-                          src={"https://www.jianshu.com/favicon.ico"}
+                          src={unamed}
                           alt=""
                         />
                       ) : null}
