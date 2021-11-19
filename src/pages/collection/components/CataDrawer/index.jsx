@@ -1,21 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import { Button, List, Drawer,Popover } from "antd";
+import { Button, List, Drawer, Popover } from "antd";
 import { ListSite, ListItem } from '../../index';
-import { GlobalOutlined, HighlightOutlined,FolderOutlined } from "@ant-design/icons";
-import logo from '../../../../assets/logo/logo192.png'
+import {  FolderOutlined } from "@ant-design/icons";
 // import { recommendSite, documentSite } from '../../assets/recommendData/recommendSite';
 
-const RightDrawer = ({ cataVisible, onCloseCata, favor, isTemp }) => {
-  const localData = isTemp ? "" : favor;
-  const folderArray = localData!=="" ? localData.filter((item) => item.type === "folder"):[];
-  folderArray.forEach((item) => {
-    let len = folderArray.length - 1;
-    item.children.forEach((sand) => {
-      sand.type === "folder" && folderArray.push(sand);
-    });
-    folderArray.splice(len, 1);
-  });
+const CataDrawer = ({ siteLen, folderArray, handleGoto, cataVisible, onCloseCata }) => {
+  const handleClick = (temp) => {
+    const index = folderArray.findIndex(item => item.name === temp)
+    // index 是数组中的位置 + 未分类网站的数据
+    handleGoto(index + siteLen)
+  }
   return (
     <Drawer
       width="360px"
@@ -30,25 +25,26 @@ const RightDrawer = ({ cataVisible, onCloseCata, favor, isTemp }) => {
       }}
     >
       <ListSite
-                itemLayout="horizontal"
-                dataSource={folderArray}
-                size="large"
-                bordered={false}
-                header={<h2 style={{ textAlign: "center", color: "var(--font-fg)" }}>文件夹目录</h2>}
-                renderItem={item => (
-                    <ListItem>
-                        <List.Item.Meta
-                            avatar={<FolderOutlined />}
-                            title={
-                                <Popover content={item.name}>
-                                    <a style={{ color: "var(--font-fg)" }} href={item.name}>{item.name.substr(0, 35)}</a>
-                                </Popover>
-                            }
-                        />
-                    </ListItem>
-                )}
+        itemLayout="horizontal"
+        dataSource={folderArray}
+        size="large"
+        bordered={false}
+        header={<h2 style={{ textAlign: "center", color: "var(--font-fg)" }}>文件夹目录</h2>}
+        renderItem={item => (
+          <ListItem>
+            <List.Item.Meta
+              avatar={<FolderOutlined />}
+              title={
+                <Popover content={item.name}>
+                  <p onClick={() => handleClick(item.name)} style={{ color: "var(--font-fg)", cursor: "pointer" }} >{item?.name?.substr(0, 35)}</p>
+                </Popover>
+              }
             />
-    </Drawer>
+          </ListItem>
+        )
+        }
+      />
+    </Drawer >
   );
 };
 
@@ -81,4 +77,4 @@ export const IconDiv = styled.div`
 export const IconButton = styled(Button)`
   color: var(--font-fg);
 `;
-export default RightDrawer;
+export default CataDrawer;

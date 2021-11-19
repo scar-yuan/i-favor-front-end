@@ -1,22 +1,20 @@
-import Reactm,{useRef} from "react";
+import  { useRef, useState } from "react";
 import styled from "styled-components";
 import { List, Carousel, Button } from "antd";
 import { flatten } from "../../../../utils/flatten";
+import CataDrawer from "../CataDrawer";
 import { LeftCircleTwoTone, RightCircleTwoTone } from "@ant-design/icons";
 import { IconButton, IconDiv, IconFont } from "../RightDrawer";
 import {
-  recommendSite,
   documentSite,
 } from "../../../../assets/recommendData/recommendSite";
-const CenterShow = ({ isTemp, favor }) => {
-
+const CenterShow = ({ isTemp, favor, onCloseCata, cataVisible }) => {
   const calRef = useRef(null);
   // 40 个一页
   const Count = 40;
   // JSON.parse(localStorage.getItem('originalFavor'))
   const localData = isTemp ? documentSite : favor;
   // 第一层是书签栏层，可以有很多个书签栏，书签栏下有收藏夹，收藏夹下有网站
-
   const siteArray = localData?.filter((item) => item.type === "site");
   const folderArray = localData?.filter((item) => item.type === "folder"); // 获取到第一层中有多少个文件夹
   // 遍历每个书签栏下的 文件夹，再分类，同时需要注意将遍历过的书签栏从数组中清除
@@ -70,7 +68,7 @@ const CenterShow = ({ isTemp, favor }) => {
                       position: "absolute",
                       backgroundColor: "#fff",
                     }}
-                    src={item.icon}
+                    src={item.icon || item.href}
                     alt={item.name}
                     onError={(e) => {
                       e.target.onerror = null;
@@ -96,7 +94,6 @@ const CenterShow = ({ isTemp, favor }) => {
       </div>
     );
   }
-
   const folders = [];
   const flatFolder = [];
   // 扁平化对应的文件夹
@@ -173,16 +170,19 @@ const CenterShow = ({ isTemp, favor }) => {
       </div>
     );
   }
-  const handleGotoNext = ()=>{
+  const handleGotoNext = () => {
     calRef.current.next()
   }
-  const handleGotoPrev = ()=>{
+  const handleGotoPrev = () => {
     calRef.current.prev()
   }
+  const handleGoto = (index) => {
+    calRef.current.goTo(index)
+  }
   return (
-    <div style={{position:"relative"}}>
-      <Larrow onClick={()=>{handleGotoPrev()}}><LeftCircleTwoTone twoToneColor="var(--card-bg)"  style={{fontSize:"50px"}}/></Larrow>
-      <Rarrow onClick={()=>{handleGotoNext()}}><RightCircleTwoTone twoToneColor="var(--card-bg)" style={{fontSize:"50px"}}/></Rarrow>
+    <div style={{ position: "relative" }}>
+      <Larrow onClick={() => { handleGotoPrev() }}><LeftCircleTwoTone twoToneColor="var(--card-bg)" style={{ fontSize: "50px" }} /></Larrow>
+      <Rarrow onClick={() => { handleGotoNext() }}><RightCircleTwoTone twoToneColor="var(--card-bg)" style={{ fontSize: "50px" }} /></Rarrow>
       <CenterContainer
         ref={calRef}
         dotsClass={"slick-dots"}
@@ -196,6 +196,7 @@ const CenterShow = ({ isTemp, favor }) => {
         {sites}
         {folders}
       </CenterContainer>
+      <CataDrawer siteLen={sites.length} folderArray={folderArray} handleGoto={(index) => handleGoto(index)} favor={favor} onCloseCata={onCloseCata} cataVisible={cataVisible} />
     </div>
   );
 };

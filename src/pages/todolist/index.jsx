@@ -13,8 +13,6 @@ import {TodoLayoutBox,TodoInput,BackButton} from './StyledTodoList'
 const token = JSON.parse(localStorage.getItem("token"))?.token
 
 
-
-
 function TodoList() {
     const inputRef = useRef()
     const [userTodo,setUserTodo] = useState([])
@@ -109,7 +107,7 @@ function TodoList() {
                         </BackButton>
                         </Link></div>
                     <div style={{position:"relative",width:"20vw",right:"-5vw"}}  >
-                        <TodoInput  ref={inputRef} placeholder="      请输入Todo~" type="text"  style={{color:"var(--font-fg"}}/>
+                        <TodoInput  ref={inputRef} placeholder="请输入Todo~" type="text"  style={{color:"var(--font-fg)",textIndent: "2em" }}/>
                         <EditOutlined onClick={() => {add(inputRef.current.value) ;inputRef.current.value = ''}} style={{position:"absolute",fontSize:"1.4rem",right:"-15vw",top:"1vh" ,color:"var(--font-fg)"}} />
                     </div>
                 </div>

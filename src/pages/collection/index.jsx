@@ -1,28 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { Upload, message, Button, List, Popover, Spin } from 'antd';
-import { UploadOutlined, AppstoreOutlined, QuestionCircleOutlined,FolderOpenOutlined, DeploymentUnitOutlined, AlignLeftOutlined, HomeOutlined } from '@ant-design/icons';
+import { UploadOutlined, AppstoreOutlined, QuestionCircleOutlined, FolderOpenOutlined, DeploymentUnitOutlined, AlignLeftOutlined, HomeOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-
-
 import { flatten } from '../../utils/flatten';
 import MyFavorList from './components/MyFavorList';
 import SortCollect from './components/SortCollect'
 import RightDrawer from './components/RightDrawer';
-import CataDrawer from './components/CataDrawer';
 import StepDrawer from './components/StepDrawer';
 import CenterShow from './components/CenterShow';
+import CataDrawer from './components/CataDrawer';
 
 export default function Collection() {
     const [favor, setFavor] = useState([])
     const [isTemp, setIsTemp] = useState(false) // 是否使用临时数据
     const [isLoadingUpload, setIsLoadingUpload] = useState(false) // 是否展示全局loading
-    // const [isDataTips, setIsDataTips] = useState(false) // 设置使用数据提示
-
     const [rightVisible, setRightVisible] = useState(false); // 右边drawer打开状态
     const [leftVisible, setLeftVisible] = useState(false)   // 左侧 drawer 打开状态
-    const [cataVisible, setCataVisible] = useState(false)   // 右侧目录drawer 打开状态
     const [stepVisible, setStepVisible] = useState(false) //控制顶部 step 打开状态
     const [sortVisible, setSortVisible] = useState(false) // 控制整理文件夹打开状态
+    const [cataVisible, setCataVisible] = useState(false)   // 右侧目录drawer 打开状态
 
     // 初始化从本地存储中取数据，没有就用预设数据
     useEffect(() => {
@@ -98,6 +94,9 @@ export default function Collection() {
     const showCataDrawer = () => {
         setCataVisible(true);
     };
+    const onCloseCata = () => {
+        setCataVisible(false);
+    };
     const showStepDrawer = () => {
         setStepVisible(true)
     }
@@ -108,9 +107,7 @@ export default function Collection() {
     const onCloseRight = () => {
         setRightVisible(false);
     };
-    const onCloseCata = () => {
-        setCataVisible(false);
-    };
+
     const onCloseLeft = () => {
         setLeftVisible(false)
     }
@@ -223,11 +220,11 @@ export default function Collection() {
             {/* 右侧抽屉 */}
             <RightDrawer onCloseRight={onCloseRight} rightVisible={rightVisible} />
             {/* 文件夹目录抽屉 */}
-            <CataDrawer isTemp={isTemp} favor={favor} onCloseCata={onCloseCata} cataVisible={cataVisible} />
+      
             {/* 整理文件夹组件写在这里，传入 onCloseSort,sortVisible,favor */}
             <SortCollect setFavor={setFavor} onCloseSort={onCloseSort} sortVisible={sortVisible} favor={favor} />
             {/* 中间布局块，待分离 */}
-            <CenterShow isTemp={isTemp} favor={favor} />
+            <CenterShow onCloseCata={onCloseCata} cataVisible={cataVisible} isTemp={isTemp} favor={favor} />
         </CollectionContainer >
     )
 }
