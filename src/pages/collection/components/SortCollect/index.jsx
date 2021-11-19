@@ -366,7 +366,10 @@ const SortCollect = (props) => {
         visible={props.sortVisible}
         size="large"
         key="left"
-        drawerStyle={{ backgroundColor: "rgb(233,233,233)" }}
+        drawerStyle={{
+          backgroundColor: " var(--card-bg)",
+          color: "var(--font-fg)"
+      }}
         bodyStyle={{ overflowX: "hidden" }}
       >
         <TitleWrap>
