@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Modal, Drawer } from "antd";
+import { Modal, Drawer, message } from "antd";
 import { nanoid } from "nanoid";
 import { CloseCircleTwoTone } from "@ant-design/icons";
 import { cloneDeep } from "lodash";
 import { Container, Draggable } from "react-smooth-dnd";
+import { SpinPosition } from "../../index";
 import instance from "../../../../utils/http";
 import NewForm from "../form/Form";
 import {
@@ -12,12 +13,14 @@ import {
   DraggableItemWrap,
   TitleWrap,
 } from "./IndexPage.js";
+import styled from "styled-components";
 // import test from "../../../../assets/testData/favor.json";
 
 const SortCollect = (props) => {
   const [isNewFolderVisible, setIsNewFolderVisible] = useState(false);
   const [isShowDelete, setIsShowDelete] = useState(false);
   const [isNewSiteVisible, setIsNewSiteVisible] = useState(false);
+  const [isLoadingUpload, setIsLoadingUpload] = useState(false) //loading
   const [data, setData] = useState([]);
   const [temp, setTemp] = useState({});
   const folderForm = useRef(null);
@@ -25,10 +28,11 @@ const SortCollect = (props) => {
   useEffect(() => {
     console.log(props.favor);
     setData(props.favor);
-  }, []);
+  }, [props.favor]);
 
   // 模态框
   const showNewFolderVisible = () => {
+    console.log(data);
     setIsNewFolderVisible(true);
   };
   const showNewSiteVisible = () => {
@@ -53,7 +57,7 @@ const SortCollect = (props) => {
       folderForm.current.resetFields();
     }, 0);
     setIsNewFolderVisible(false);
-    
+
   };
 
   const handleNewSiteVisibleOk = () => {
@@ -73,7 +77,7 @@ const SortCollect = (props) => {
       siteForm.current.resetFields();
     }, 0);
     setIsNewSiteVisible(false);
-    
+
   };
 
   const handleNewFolderVisibleCancel = () => {
@@ -142,7 +146,7 @@ const SortCollect = (props) => {
         });
         const index = onGetIndex(addedParent, result, []);
         result[index[0]].children = tempData;
-      }else if (addedDepth === 3) {
+      } else if (addedDepth === 3) {
         const tempData = onDrag(addedParent.children, {
           ...current,
           removedIndex: null,
@@ -160,7 +164,7 @@ const SortCollect = (props) => {
           addedIndex: null,
         });
         result[index[0]].children = tempData;
-      }else if (removedDepth === 3) {
+      } else if (removedDepth === 3) {
         const index = onGetIndex(removedParent, result, []);
         const parent = result[index[0]].children[index[1]];
         const tempData = onDrag(parent.children, {
@@ -186,7 +190,7 @@ const SortCollect = (props) => {
           const tempData = onDrag(parent.children, dropResult);
           const index = onGetIndex(parent, result, []);
           result[index[0]].children = tempData;
-        }else if (depth === 3) {
+        } else if (depth === 3) {
           const tempData = onDrag(parent.children, dropResult);
           const index = onGetIndex(parent, result, []);
           result[index[0]].children[index[1]].children = tempData;
@@ -242,7 +246,7 @@ const SortCollect = (props) => {
         getChildPayload={(index) => renderData[index]}
         getGhostParent={() => document.body}
       >
-        {renderData&&renderData.map((item) => {
+        {renderData && renderData.map((item) => {
           return (
             <Draggable key={item.nanoid}>
               <DraggableItemWrap>
@@ -293,23 +297,33 @@ const SortCollect = (props) => {
   const handleSingleDelete = (id) => {
     console.log(id);
     function getFilterArr(arr, tar) {
-      return arr.filter(function(item, i) {
-          if (item.children) {
-              item.children = getFilterArr(item.children, tar)
-          }
-          return item.nanoid !== tar;
+      return arr.filter(function (item, i) {
+        if (item.children) {
+          item.children = getFilterArr(item.children, tar)
+        }
+        return item.nanoid !== tar;
       })
-  }
-  const filterData = getFilterArr(data,id);
-  setData(filterData);
+    }
+    const filterData = getFilterArr(data, id);
+    setData(filterData);
   };
   const handleSave = () => {
     console.log(data);
-    instance.put('/favor',{bookmark:data}).then((res)=>{
-      console.log(res);
-    },(err)=>{
+    setIsLoadingUpload(true)
+    instance.put('/favor', { bookmark: data }).then((res) => {
+      // console.log(res.data.data);
+      props.setFavor(res.data.data)
+      localStorage.setItem('originalFavor',JSON.stringify(res.data.data))
+      if (res.data.code === '20003') {
+        message.success('更新数据库成功')
+      }
+    }, (err) => {
       console.log(err);
+      message.error('更新失败，请重试如多次失败请重新登录')
     })
+      .finally(() => {
+        setIsLoadingUpload(false)
+      })
     setIsShowDelete(false);
   };
   // 新建文件夹
@@ -319,32 +333,33 @@ const SortCollect = (props) => {
   const handleNewSite = () => {
     showNewSiteVisible();
   };
- /*  useEffect(() => {
-    function flatten(array, result) {
-      result = result || [];
-      array.forEach((element) => {
-        if (element.children.length !== 0) {
-          result.push(element);
-          flatten(element.children, result);
-        } else {
-          result.push(element);
-        }
-      });
-      return result;
-    }
-    // console.log(test.data);
-    // console.log(list);
-    const res = flatten(test.data);
-    // console.log(res);
-    // setFlatData(res);
-    // console.log('data',data);
-    // console.log('temp',temp);
-  }, []); */
+  /*  useEffect(() => {
+     function flatten(array, result) {
+       result = result || [];
+       array.forEach((element) => {
+         if (element.children.length !== 0) {
+           result.push(element);
+           flatten(element.children, result);
+         } else {
+           result.push(element);
+         }
+       });
+       return result;
+     }
+     // console.log(test.data);
+     // console.log(list);
+     const res = flatten(test.data);
+     // console.log(res);
+     // setFlatData(res);
+     // console.log('data',data);
+     // console.log('temp',temp);
+   }, []); */
   return (
     <>
+      <SpinPosition size="large" spinning={isLoadingUpload} />
       <Drawer
-        title="收藏夹管理"
         placement="left"
+        closable={false}
         onClose={() => {
           props.onCloseSort();
         }}
@@ -352,6 +367,7 @@ const SortCollect = (props) => {
         size="large"
         key="left"
         drawerStyle={{ backgroundColor: "rgb(233,233,233)" }}
+        bodyStyle={{ overflowX: "hidden" }}
       >
         <TitleWrap>
           <div
@@ -386,6 +402,7 @@ const SortCollect = (props) => {
           >
             保存
           </div>
+          {/* <div>如果数据未更新，请点击刷新</div> */}
         </TitleWrap>
         {/* 新建文件夹模态框 */}
         <Modal
@@ -409,7 +426,7 @@ const SortCollect = (props) => {
         >
           <NewForm ref={siteForm} type="site"></NewForm>
         </Modal>
-        <ListWrap>{onDomRender(data, null, 1)}</ListWrap>
+        <ListWrap >{onDomRender(data, null, 1)}</ListWrap>
       </Drawer>
     </>
   );

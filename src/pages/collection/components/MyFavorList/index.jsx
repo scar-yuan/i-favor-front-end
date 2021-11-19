@@ -1,8 +1,10 @@
 import React from 'react';
 import { List, Drawer, Avatar, Popover } from 'antd';
 import { ListSite, ListItem } from '../../index';
+import { flatten } from '../../../../utils/flatten';
 
 const MyFavorList = ({ favor, leftVisible, onCloseLeft }) => {
+    const renderData = flatten(favor)?.filter(item => item.type === 'site')
     return (
         <Drawer
             width="350px"
@@ -21,7 +23,7 @@ const MyFavorList = ({ favor, leftVisible, onCloseLeft }) => {
         >
             <ListSite
                 itemLayout="horizontal"
-                dataSource={favor}
+                dataSource={renderData}
                 size="large"
                 bordered={false}
                 header={<h2 style={{ textAlign: "center", color: "var(--font-fg)" }}>收藏的网站列表</h2>}

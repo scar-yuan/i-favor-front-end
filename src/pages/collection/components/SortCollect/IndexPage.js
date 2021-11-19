@@ -27,6 +27,7 @@ const ListWrap = styled.div`
 
 const ContentWrap = styled.div`
   cursor: grab;
+  user-select: none;
   .show {
     display: inline-block;
   }
@@ -35,11 +36,12 @@ const ContentWrap = styled.div`
   }
   .notfolder {
     padding: 10px;
-    margin: 10px 30px 10px 5px;
+    margin: 10px 10px 10px 5px;
     border-radius: 20px;
-    box-shadow: 5px 5px 10px #cecece, -5px -5px 10px #fff;
+    box-shadow: 5px 5px 10px var(--card-sd), -5px -5px 10px var(--card-sf);
     display: flex;
     align-items: center;
+    color: var(--font-fg);
     .site-ico {
       margin-right: 20px;
     }
@@ -58,9 +60,10 @@ const ContentWrap = styled.div`
 const DraggableItemWrap = styled.div`
   .draggable-item {
     padding: 10px;
-    margin: 10px 30px 10px 5px;
+    margin: 10px 10px 10px 5px;
     border-radius: 20px;
-    box-shadow: 5px 5px 10px #cecece, -2px -2px 5px #fefefe;
+    color: var(--font-fg);
+    box-shadow: 5px 5px 10px var(--card-sd), -2px -2px 5px var(--card-sf);
   }
 `;
 
@@ -71,14 +74,14 @@ const TitleWrap = styled.div`
     cursor: pointer;
     margin: 0 20px 10px 0;
     border: none;
-    color: #090909;
+    color: var(--font-fg);
     padding: 0.3em 1.1em;
     font-size: 14px;
     border-radius: 0.3em;
-    background: #e8e8e8;
-    border: 1px solid #e8e8e8;
+    background: var(--primary-bg);
+    border: 1px solid var(--primary-bg);
     transition: all 0.3s;
-    box-shadow: 3px 3px 6px #c5c5c5, -3px -3px 6px #ffffff;
+    box-shadow: 3px 3px 6px var(--card-sd), -3px -3px 6px var(--card-sf);
     &:hover {
       border: 1px solid white;
     }

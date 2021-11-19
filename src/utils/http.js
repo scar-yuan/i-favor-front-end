@@ -14,14 +14,16 @@ instance.interceptors.request.use(
       const token = JSON.parse(localStorage.getItem("token")).token;
       console.log(token);
       instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      console.log(instance.defaults.headers);
     } else {
+      console.log(111);
       delete instance.defaults.headers.common["Authorization"];
     }
-    // console.log('请求拦截器 成功');
+    console.log("请求拦截器 成功");
     return config;
   },
   function (error) {
-    // console.log('请求拦截器 失败');
+    console.log("请求拦截器 失败");
     return Promise.reject("error");
   }
 );
