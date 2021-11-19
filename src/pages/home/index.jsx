@@ -31,12 +31,13 @@ function Home(props) {
             title: '你确定要退出吗',
             content: '退出后无法使用过多服务噢~',
             okText: '确定',
+            cancelText:'取消',
             onOk() {
                 message.success('退出成功！')
                 localStorage.removeItem("token");
                 // 没必要清空
-                // localStorage.removeItem("flatFavor");
-                // localStorage.removeItem("originalFavor")
+                localStorage.removeItem("flatFavor");
+                localStorage.removeItem("originalFavor")
                 dispatch({
                     type: USER_LOGOUT,
                     userLogout: { username: "", token: "", isLogin: false },

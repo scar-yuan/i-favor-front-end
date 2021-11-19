@@ -308,7 +308,7 @@ const SortCollect = (props) => {
     setData(filterData);
   };
   const handleSave = () => {
-    console.log(data);
+    console.log('请求');
     setIsLoadingUpload(true)
     instance.put('/favor', { bookmark: data }).then((res) => {
       // console.log(res.data.data);
@@ -366,7 +366,10 @@ const SortCollect = (props) => {
         visible={props.sortVisible}
         size="large"
         key="left"
-        drawerStyle={{ backgroundColor: "rgb(233,233,233)" }}
+        drawerStyle={{
+          backgroundColor: " var(--card-bg)",
+          color: "var(--font-fg)"
+      }}
         bodyStyle={{ overflowX: "hidden" }}
       >
         <TitleWrap>
