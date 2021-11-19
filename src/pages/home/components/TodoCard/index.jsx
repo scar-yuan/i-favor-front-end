@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom'
 import { Card } from 'antd';
 import styled from "styled-components";
 import MyButton from '../Button';
@@ -13,7 +14,7 @@ const TodoCard = () => {
               <div className="todo"><MinRadio readOnly checked type="radio"/><div className="todoContent">潇洒离去</div><div className="timeDesc">07:30</div></div>
             </TodoDiv>
             <ButtonBox>
-            <MyButton href="/todolist" >待办清单</MyButton>
+            <Link to="/todolist"><MyButton>待办清单</MyButton></Link>
             </ButtonBox>
         </NewCard>
     );

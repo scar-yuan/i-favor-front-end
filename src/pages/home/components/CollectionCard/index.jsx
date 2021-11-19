@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, List, Button, Carousel } from 'antd';
 import styled from "styled-components";
+import {Link} from 'react-router-dom'
 import MyButton from '../Button/index'
 const CollectionCard = ({ searchData }) => {
   console.log(searchData);
@@ -24,21 +25,21 @@ const CollectionCard = ({ searchData }) => {
       // itemLayout="horizontal"
       dataSource={sliceItems[i]}
       renderItem={item => (
-        <Button type="link" href={item.href} target="_blank">
-          <IconDiv>
-            {/* <img style={{ width: "48px", height: "48px" }} src={item.href + 'favicon.ico'} alt={item.name} /> */}
-            <IconFont>
-              <span>{item.name.trim().substr(0, 1)}</span>
-            </IconFont>
-            <img
-              style={{ width: "48px", height: "48px", position: "absolute", backgroundColor: "var(--primary-bg)" }}
-              src={item.href + '/favicon.ico'}
-              alt={item.name}
-              onError={(e) => { e.target.onerror = null; e.target.style = "display: none" }}
-            />
-          </IconDiv>
-          <p style={{ fontSize: "12px", color: "var(--font-fg)", width: "56px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.name}</p>
-        </Button>
+          <Button type="link" href={item.href} target="_blank">
+            <IconDiv>
+              {/* <img style={{ width: "48px", height: "48px" }} src={item.href + 'favicon.ico'} alt={item.name} /> */}
+              <IconFont>
+                <span>{item.name.trim().substr(0, 1)}</span>
+              </IconFont>
+              <img
+                style={{ width: "48px", height: "48px", position: "absolute", backgroundColor: "var(--primary-bg)" }}
+                src={item.href + '/favicon.ico'}
+                alt={item.name}
+                onError={(e) => { e.target.onerror = null; e.target.style = "display: none" }}
+              />
+            </IconDiv>
+            <p style={{ fontSize: "12px", color: "var(--font-fg)", width: "56px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.name}</p>
+          </Button>
       )}
     /></div>)
   }
@@ -56,7 +57,7 @@ const CollectionCard = ({ searchData }) => {
         {items}
       </Carousel>
       <ButtonBox>
-        <MyButton href="/collection">收藏夹管理</MyButton>
+        <Link to="/collection"><MyButton>收藏夹管理</MyButton></Link>
       </ButtonBox>
     </NewCard>
   );

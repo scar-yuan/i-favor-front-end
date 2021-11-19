@@ -3,13 +3,14 @@ import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { Button, Row, Switch, Avatar, Modal, message } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import {Link} from 'react-router-dom'
+
 import StudyCard from "./components/StudyCard";
 import TodoCard from "./components/TodoCard";
 import CollectionCard from "./components/CollectionCard";
 import BigTime from "./components/BigTime";
 import SearchView from "./components/SearchView";
 // import setDarkTheme from "../../assets/untils/darkTheme";
-
 import { LoginContext, USER_LOGOUT, ThemeContext } from "../../store/context";
 function Home(props) {
     const [login, setLogin] = useState(false);
@@ -59,9 +60,11 @@ function Home(props) {
                         <span style={{ color: "var(--font-fg)", cursor: "pointer" }} onClick={handleLogout}>{loginState.username}</span>
                     </Row>
                 ) : (
-                    <LoginButton type="link" href="/login">
-                        登录
-                    </LoginButton>
+                    <Link to="/login">
+                        <LoginButton>
+                            登录
+                       </LoginButton>
+                    </Link>
                 )}
 
                 {/* 模式切换 */}
