@@ -71,8 +71,11 @@ registerShape("interval", "3d", {
 
 export default function Statistics() {
 	return (
-		<Chart height={400} autoFit data={data}>
-			<Interval shape="3d" position="day*times" />
+		<Chart 
+			height = { 400 }
+			autoFit
+			data = { data }
+		><Interval shape="3d" position="day*times" />
 		</Chart>
 	);
 }

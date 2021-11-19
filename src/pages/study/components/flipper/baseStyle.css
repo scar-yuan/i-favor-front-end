@@ -1,10 +1,10 @@
 .M-Flipper {
   display: inline-block;
   position: relative;
-  border: solid 1px #000;
+  border: solid 1px rgb(68, 67, 67);
   border-radius: 10px;
-  background: #fff;
-  color: #fff;
+  background: var(--card-bg);
+  color: var(--card-sf);
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
   text-align: center;
   font-family: "Helvetica Neue";
