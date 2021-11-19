@@ -3,6 +3,7 @@ import { Row, Col } from 'antd';
 import Clock from './components/clock';
 import Timer from './components/timer';
 import BaseButton from './components/baseButton';
+
 export default function index() {
 
     return (
@@ -11,8 +12,9 @@ export default function index() {
             style = {{
                 height: '100vh',
                 paddingTop: '15vh',
+                color: 'var(--font-fg)'
             }}
-        >   
+        >
             <Row 
                 align = 'center'
                 height = { 100 }
@@ -34,12 +36,8 @@ export default function index() {
                 </Col>
                 <Col><Timer /></Col>
             </Row>
-            <Row   
-                style = {{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}
+            <Row
+                align = 'center'
             >
                 <Col span = { 4 }><BaseButton tag = { '1' } /></Col>
                 {/* <Col span = { 3 }><BaseButton tag = { '2' }/></Col> */}

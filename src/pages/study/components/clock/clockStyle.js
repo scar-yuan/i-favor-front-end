@@ -18,7 +18,7 @@ const ClockStyle = styled.div`
   }
   .clock em {
     display: inline-block;
-    line-height: 102px;
+    line-height: 90px;
     font-size: 66px;
     font-style: normal;
     vertical-align: top;
