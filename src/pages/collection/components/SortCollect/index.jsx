@@ -358,7 +358,7 @@ const SortCollect = (props) => {
     <>
       <SpinPosition size="large" spinning={isLoadingUpload} />
       <Drawer
-        placement="left"
+        placement="right"
         closable={false}
         onClose={() => {
           props.onCloseSort();

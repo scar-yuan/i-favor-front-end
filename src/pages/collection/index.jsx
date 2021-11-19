@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Upload, message, Button, List, Popover, Spin } from 'antd';
-import { UploadOutlined, AppstoreOutlined, QuestionCircleOutlined, DeploymentUnitOutlined, AlignLeftOutlined, HomeOutlined } from '@ant-design/icons';
+import { UploadOutlined, AppstoreOutlined, QuestionCircleOutlined,FolderOpenOutlined, DeploymentUnitOutlined, AlignLeftOutlined, HomeOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
 
@@ -8,6 +8,7 @@ import { flatten } from '../../utils/flatten';
 import MyFavorList from './components/MyFavorList';
 import SortCollect from './components/SortCollect'
 import RightDrawer from './components/RightDrawer';
+import CataDrawer from './components/CataDrawer';
 import StepDrawer from './components/StepDrawer';
 import CenterShow from './components/CenterShow';
 
@@ -19,6 +20,7 @@ export default function Collection() {
 
     const [rightVisible, setRightVisible] = useState(false); // 右边drawer打开状态
     const [leftVisible, setLeftVisible] = useState(false)   // 左侧 drawer 打开状态
+    const [cataVisible, setCataVisible] = useState(false)   // 右侧目录drawer 打开状态
     const [stepVisible, setStepVisible] = useState(false) //控制顶部 step 打开状态
     const [sortVisible, setSortVisible] = useState(false) // 控制整理文件夹打开状态
 
@@ -93,6 +95,9 @@ export default function Collection() {
     const showRightDrawer = () => {
         setRightVisible(true);
     };
+    const showCataDrawer = () => {
+        setCataVisible(true);
+    };
     const showStepDrawer = () => {
         setStepVisible(true)
     }
@@ -102,6 +107,9 @@ export default function Collection() {
     // 抽屉中关闭的抽屉的方法
     const onCloseRight = () => {
         setRightVisible(false);
+    };
+    const onCloseCata = () => {
+        setCataVisible(false);
     };
     const onCloseLeft = () => {
         setLeftVisible(false)
@@ -181,6 +189,18 @@ export default function Collection() {
                         <AppstoreOutlined />
                     </OpenButton>
                 </Popover>
+                {/* 推荐列表*/}
+                <Popover
+                    placement="right"
+                    content={"打开文件夹目录"}
+                >
+                    <OpenButton
+                        onClick={showCataDrawer}
+                        size="large"
+                    >
+                        <FolderOpenOutlined />
+                    </OpenButton>
+                </Popover>
                 {/* 整理文件夹*/}
                 <Popover
                     placement="right"
@@ -202,6 +222,8 @@ export default function Collection() {
             <StepDrawer onCloseStep={onCloseStep} stepVisible={stepVisible} />
             {/* 右侧抽屉 */}
             <RightDrawer onCloseRight={onCloseRight} rightVisible={rightVisible} />
+            {/* 文件夹目录抽屉 */}
+            <CataDrawer isTemp={isTemp} favor={favor} onCloseCata={onCloseCata} cataVisible={cataVisible} />
             {/* 整理文件夹组件写在这里，传入 onCloseSort,sortVisible,favor */}
             <SortCollect setFavor={setFavor} onCloseSort={onCloseSort} sortVisible={sortVisible} favor={favor} />
             {/* 中间布局块，待分离 */}
