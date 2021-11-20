@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { TimerStyle } from './timerStyle';
 import Flipper from '../flipper';
 
@@ -11,8 +11,11 @@ export default function Timer() {
     const s1 = useRef();
     const s2 = useRef();
     const flipObjs = [h1, h2, m1, m2, s1, s2];// 记录翻转对象
-    let [timer, h, m, s] = [null, 0, 0, 0];
+    const [hour, setHour] = useState(0);
+    const [minute, setMinute] = useState(0);
+    const [second, setSecond] = useState(0);
     const add = () => {
+        let [h, m, s] = [hour, minute, second];
         s += 1;
 
         if (s === 60) {
@@ -23,19 +26,21 @@ export default function Timer() {
             m = 0;
             h += 1;
         }
-
+        setHour(h);
+        setMinute(m);
+        setSecond(s);
         let nextTime = [h, m, s];
         nextTime = nextTime.map((v) => ( v < 10 ? '0' + v : v));
         return nextTime.join('');
     }
 
     const calcNowTime = () => {
-        let times = [h, m, s];
+        let times = [hour, minute, second];
         times = times.map((v) => ( v < 10 ? '0' + v : v));
         return times.join('');
     }
-    const run = () => {
-        timer = setInterval(() => {
+    useEffect(() => {
+        const timer = setTimeout(() => {
             const time = calcNowTime();
             const nextTime = add();
             for (let i = 0; i < flipObjs.length; i++) {
@@ -46,9 +51,11 @@ export default function Timer() {
                 flipObjs[i].current.flipDown(time[i], nextTime[i])
             }
         }, 1000);
-    }
-    
-    run();
+        return () => {
+            clearTimeout(timer);
+        }
+    }, [hour, minute, second]);
+
     return (
         <TimerStyle>
             <div 
