@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Flipper from '../flipper';
 import { ClockStyle } from './clockStyle';
-// import './clock.css';
 
 export default function Clock(props, ref) {
     const [running, setRunning] = useState(false);// 记录时钟是否已开始运行
@@ -13,7 +12,7 @@ export default function Clock(props, ref) {
     const second1 = useRef();
     const second2 = useRef();
     const flipObjs = [hour1, hour2, minute1, minute2, second1, second2];// 记录翻转对象
-    let timer = null;
+    const [nowTime, setNowTime] = useState('000000');
     const calc = (v) => {
         return v < 10 ? '0' + v  : String(v);
     }
@@ -42,8 +41,12 @@ export default function Clock(props, ref) {
         setYtd(` ${timeStr.year} 年 ${timeStr.mouth} 月 ${timeStr.day} 日`);
     }
 
-    const run = () => {
-        timer = setInterval(() => {
+    useEffect(() => {
+        if (!running) {
+            setRunning(true);
+            init();
+        }
+        const timer = setTimeout(() => {
             const now = new Date();
             const time = formatDate(now);
             const nextTime = formatDate(new Date(now.getTime() + 1000));
@@ -54,18 +57,14 @@ export default function Clock(props, ref) {
                 }
                 flipObjs[i].current.flipDown(time.h_s[i], nextTime.h_s[i])
             }
-            console.log('2');
+            setNowTime(nextTime.h_s);
+            console.log(nowTime);
         }, 1000);
-    }
-
-    useEffect(() => {
-        if (!running) {
-            setRunning(true);
-            init();
-            run();
+        return () => {
+            clearTimeout(timer);
         }
-    }, []);
-
+    }, [nowTime]);
+    
     return (
         <ClockStyle>
             <div className = "clock">
@@ -88,4 +87,3 @@ export default function Clock(props, ref) {
         </ClockStyle>
     )
 }
-// Clock = forwardRef(forwardRef);

@@ -83,7 +83,7 @@ const StudyCard = () => {
                 // textAlign = "center"
                 style = {{ 
                     marginBottom: '-20px',
-                    paddingLeft: '14px',
+                    paddingLeft: '17px',
                     height: '16px',
                     lineHeight: '16px' 
                 }}>Learning is the eye of the mind.</p>
